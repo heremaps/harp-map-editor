@@ -1,4 +1,4 @@
-# @here/harp-mapeditor [![Build Status](https://travis-ci.com/heremaps/harp-mapeditor.svg?branch=master)](https://travis-ci.com/heremaps/harp-mapeditor)
+# @here/harp-map-editor [![Build Status](https://travis-ci.com/heremaps/harp-map-editor.svg?branch=master)](https://travis-ci.com/heremaps/harp-map-editor)
 
 ## Overview
 

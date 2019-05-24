@@ -1,5 +1,5 @@
 {
-    "name": "@here/harp-mapeditor",
+    "name": "@here/harp-map-editor",
     "version": "0.1.0",
     "description": "A simple online editor for harp.gl themes.",
     "author": {

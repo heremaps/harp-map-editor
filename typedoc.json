@@ -1,11 +1,9 @@
 {
-    "name": "harp-mapeditor",
+    "name": "harp-map-editor",
     "mode": "file",
     "module": "commonjs",
     "out": "dist/doc",
-    "exclude": [
-        "**/node_modules/**"
-    ],
+    "exclude": ["**/node_modules/**"],
     "readme": "README.md",
     "target": "ES6",
     "excludePrivate": "true",
