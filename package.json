@@ -1,0 +1,62 @@
+{
+    "name": "@here/harp-mapeditor",
+    "version": "0.1.0",
+    "description": "A simple online editor for harp.gl themes.",
+    "author": {
+        "name": "HERE Europe B.V.",
+        "url": "https://here.com"
+    },
+    "license": "Apache-2.0",
+    "scripts": {
+        "start": "webpack-dev-server -d",
+        "build": "webpack -d",
+        "typedoc": "typedoc --disableOutputCheck --options typedoc.json",
+        "tslint": "tslint --project tsconfig.json",
+        "tslint:fix": "tslint --fix --project tsconfig.json",
+        "prettier": "prettier -l '**/*.ts' '**/*.tsx' '**/*.json'",
+        "prettier:fix": "prettier --write '**/*.ts' '**/*.tsx' '**/*.json'"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=9.11.1",
+        "npm": ">=5.8.0",
+        "yarn": ">=1.11.1"
+    },
+    "devDependencies": {
+        "@here/harp-font-resources": "~0.2.4",
+        "@here/harp-map-controls": "~0.2.3",
+        "@here/harp-map-theme": "~0.2.3",
+        "@here/harp-mapview": "~0.8.3",
+        "@here/harp-omv-datasource": "~0.3.3",
+        "@types/react": "^16.8.17",
+        "@types/react-dom": "^16.8.4",
+        "@types/throttle-debounce": "^1.1.1",
+        "copy-webpack-plugin": "^5.0.3",
+        "css-loader": "^2.1.1",
+        "html-webpack-plugin": "^3.2.0",
+        "monaco-editor": "^0.17.0",
+        "monaco-editor-webpack-plugin": "^1.7.0",
+        "prettier": "^1.17.0",
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6",
+        "react-icons": "^3.7.0",
+        "sass-loader": "^7.1.0",
+        "style-loader": "^0.23.1",
+        "three": "^0.104.0",
+        "throttle-debounce": "^2.1.0",
+        "ts-loader": "^6.0.0",
+        "tslint": "^5.16.0",
+        "tslint-config-prettier": "^1.18.0",
+        "typedoc": "^0.14.2",
+        "typescript": "^3.4.5",
+        "webpack": "^4.31.0",
+        "webpack-cli": "^3.3.2",
+        "webpack-dev-server": "^3.3.1",
+        "webpack-merge": "^4.2.1"
+    },
+    "dependencies": {
+        "node-sass": "^4.12.0"
+    }
+}

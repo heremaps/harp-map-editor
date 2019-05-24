@@ -1,0 +1,419 @@
+$bg-color: #333;
+$bg-hover-color: #345;
+$icon-color: #fff;
+$icon-active: #77f;
+$step: 32px;
+$separator-size: $step * 0.25 * 0.5;
+
+*>* {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body,
+html,
+#root,
+#app,
+#editor,
+#editor-container {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    overflow: hidden;
+}
+
+#root {
+    background-color: $bg-hover-color;
+    color: $icon-color;
+    font-family: monospace;
+    font-size: $step * 0.5;
+}
+
+#menu {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: $bg-color;
+    padding: $separator-size;
+}
+
+#text-editor {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: $icon-color;
+    top: auto;
+    left: auto;
+    bottom: auto;
+    right: auto;
+
+    #editor-container {
+        overflow: hidden;
+
+        .editor {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    #menu {
+        left: auto;
+        bottom: auto;
+        top: auto;
+        right: auto;
+    }
+
+    .separator-drug {
+        background-color: $bg-color;
+        position: absolute;
+    }
+}
+
+#text-editor.left {
+    left: 0;
+    top: 0;
+
+    .separator-drug {
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: $separator-size;
+    }
+
+    #editor-container {
+        padding-right: $separator-size;
+    }
+
+    #menu {
+        bottom: 0;
+        right: - $step - $separator-size;
+    }
+
+    .separator-drug {
+        cursor: ew-resize;
+    }
+}
+
+#text-editor.right {
+    right: 0;
+    top: 0;
+
+    .separator-drug {
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: $separator-size;
+    }
+
+    #editor-container {
+        padding-left: $separator-size;
+    }
+
+    #menu {
+        bottom: 0;
+        left: - $step - $separator-size;
+    }
+
+    .separator-drug {
+        cursor: ew-resize;
+    }
+}
+
+#text-editor.top {
+    left: 0;
+    top: 0;
+
+    .separator-drug {
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: $separator-size;
+    }
+
+    #editor-container {
+        padding-bottom: $separator-size;
+    }
+
+    .separator-drug {
+        cursor: ns-resize;
+    }
+}
+
+#text-editor.bottom {
+    left: 0;
+    bottom: 0;
+
+    .separator-drug {
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: $separator-size;
+    }
+
+    #editor-container {
+        padding-top: $separator-size;
+    }
+
+    #menu {
+        left: 0;
+        top: - $step - $separator-size;
+    }
+
+    .separator-drug {
+        cursor: ns-resize;
+    }
+}
+
+#text-editor.top,
+#text-editor.bottom {
+    #menu .button-icon {
+        float: left;
+    }
+
+    .button-icon+.button-icon {
+        margin-left: $separator-size;
+    }
+}
+
+#text-editor.left,
+#text-editor.right {
+    .button-icon+.button-icon {
+        margin-top: $separator-size;
+    }
+}
+
+
+#editor-container.right {
+    padding-left: $separator-size;
+}
+
+#editor-container.top {
+    padding-bottom: $separator-size;
+}
+
+#editor-container.bottom {
+    padding-top: $separator-size;
+}
+
+#map-container {
+    height: 100%;
+    width: 100%;
+
+    .map {
+        height: 100%;
+        width: 100%;
+    }
+
+    #info-block {
+        position: absolute;
+        bottom: auto;
+        right: auto;
+        top: auto;
+        left: auto;
+        color: $icon-color;
+        white-space: pre;
+        height: fit-content;
+
+        #intersect-info {
+            background-color: $bg-color;
+            padding: $separator-size * 2;
+            font-weight: bold;
+        }
+    }
+
+    #controls-container {
+        position: absolute;
+        left: auto;
+        top: auto;
+        right: auto;
+        bottom: auto;
+    }
+
+    #copyright {
+        background-color: $bg-hover-color;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        opacity: 0.5;
+        padding: 2px;
+    }
+    #copyright:hover {
+        opacity: 1;
+        background-color: $bg-color;
+        transition: opacity 0.5s ease-in-out, background-color 0.5s ease-in-out;
+    }
+}
+
+#map-container.left,
+#map-container.top,
+#map-container.float,
+#map-container.bottom {
+    #info-block {
+        bottom: 0;
+        right: 0;
+    }
+
+    #controls-container {
+        top: 0;
+        bottom: 0;
+        right: 0;
+    }
+}
+
+#map-container.bottom {
+    #info-block {
+        top: 0;
+        right: 0;
+    }
+}
+
+#map-container.right {
+    #info-block {
+        bottom: 0;
+        left: 0;
+    }
+
+    #controls-container {
+        top: 0;
+        bottom: 0;
+        left: 70px;
+    }
+}
+
+#mouse-catcher {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+#mouse-catcher.left,
+#mouse-catcher.right {
+    cursor: ew-resize;
+}
+
+#mouse-catcher.top,
+#mouse-catcher.bottom {
+    cursor: ns-resize;
+}
+
+.button-icon.top {
+    transform: rotate(90deg);
+}
+
+.button-icon.right {
+    transform: rotate(180deg);
+}
+
+.button-icon.bottom {
+    transform: rotate(270deg);
+}
+
+.button-icon {
+    color: $icon-color;
+    width: $step;
+    height: $step;
+    font-size: $step * 0.75;
+    outline: none;
+    padding: $step * 0.25 * 0.5;
+    background-color: $bg-color;
+    display: block;
+}
+
+.button-icon.active {
+    background-color: $icon-active;
+}
+
+.button-icon:active {
+    color: $icon-active;
+}
+
+.button-icon:hover {
+    background-color: $bg-hover-color;
+}
+
+.popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+
+    .window {
+        position: relative;
+        background-color: $bg-hover-color;
+        margin: 0 auto;
+        top: 50%;
+        transform: translateY(-50%);
+        width: max-content;
+        min-width: $step * 8;
+
+        header {
+            background-color: $bg-color;
+            text-align: center;
+            font-size: $step * 0.5;
+            padding: $step * 0.25;
+            height: $step;
+        }
+
+        .button-icon {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .content {
+            padding: $step * 0.25;
+        }
+    }
+
+    .window.close-button {
+        header {
+            padding-right: $step * 0.25 + $step;
+        }
+    }
+}
+
+.tabs {
+    >ul {
+        display: table;
+        width: 100%;
+        border-bottom: $bg-color $separator-size solid;
+        user-select: none;
+        margin-bottom: $separator-size;
+
+        li {
+            padding: $separator-size * 2 $step * 0.5 $separator-size;
+            display: table-cell;
+            text-align: center;
+        }
+
+        li:hover,
+        li.active {
+            background-color: $bg-color;
+        }
+    }
+
+    .tab-content {
+        padding: $step * 0.5;
+    }
+}
+
+.select-list {
+    list-style: none;
+}
+
+
+a {
+    color: $icon-color;
+}
+
+p {
+    margin: $separator-size 0;
+}
