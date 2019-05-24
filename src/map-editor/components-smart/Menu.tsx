@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import * as React from "react";
+import JSONTree from "react-json-tree";
 import { Popup, Side } from "../../types";
 import Component, { SettingsState } from "../Component";
 import ButtonIcon, { ButtonIconProps, ICONS } from "../components/ButtonIcon";
+import { geometryList } from "../map-handler/MapGeometryList";
 import settings from "../Settings";
 import TextEditor from "../TextEditor";
 import PopupSelectTheme from "./PopupSelectTheme";
@@ -130,6 +132,7 @@ export default class extends Component<{}, Props> {
 
                 if (this.state.store.styles !== null) {
                     buttons.unshift(this.createThemePopup());
+                    buttons.unshift(this.createGeometriesPopup());
                 }
                 break;
 
@@ -190,6 +193,27 @@ export default class extends Component<{}, Props> {
                                 );
                             }}
                         />
+                    )
+                };
+                popups.push(popup);
+                settings.setStoreData("popups", popups);
+            }
+        };
+    }
+
+    private createGeometriesPopup(): ButtonIconProps {
+        return {
+            icon: ICONS.geometries,
+            title: "Geometries list",
+            onClick: () => {
+                const popups = settings.getStoreData("popups")!.slice();
+                const popup = {
+                    name: "Geometries list",
+                    options: {},
+                    component: (
+                        <div className="geometries-list-popup-content-wrapper">
+                            <JSONTree data={ geometryList } />
+                        </div>
                     )
                 };
                 popups.push(popup);

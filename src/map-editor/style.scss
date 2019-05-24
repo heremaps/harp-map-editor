@@ -417,3 +417,14 @@ a {
 p {
     margin: $separator-size 0;
 }
+
+//
+
+.geometries-list-popup-content-wrapper {
+    width: 450px;
+    height: 400px;
+    overflow-y: scroll;
+    .content {
+        width: 100%;
+    }
+}

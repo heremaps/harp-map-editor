@@ -12,11 +12,13 @@ import {
     MapViewEventNames
 } from "@here/harp-mapview";
 import { APIFormat, OmvDataSource } from "@here/harp-omv-datasource";
+import { OmvTileDecoder } from "@here/harp-omv-datasource/lib/OmvDecoder";
 import { LoggerManager } from "@here/harp-utils";
 import { EventEmitter } from "events";
 import { throttle } from "throttle-debounce";
 import settings from "../Settings";
 import textEditor from "../TextEditor";
+import { getGeometryData } from './MapGeometryList';
 import MapViewState from "./MapViewState";
 
 export const logger = LoggerManager.instance.create("MapHandler");
@@ -146,6 +148,15 @@ class MapHandler extends EventEmitter {
             })
         );
 
+        this.m_mapView.addEventListener(
+            MapViewEventNames.MovementFinished,
+            () => {
+
+                getGeometryData( this.m_mapView as MapView, this.m_datasource as OmvDataSource );
+
+            }
+        );
+
         settings.on("setting:textEditor:sourceCode", this.rebuildMap);
         settings.on("setting:editorCurrentStyle", this.rebuildMap);
 
@@ -190,7 +201,8 @@ class MapHandler extends EventEmitter {
             styleSetName: style === "" ? undefined : style,
             maxZoomLevel: 17,
             authenticationCode: "AYlqpxvwl7C8tSVG22lX2lg",
-            copyrightInfo: this.m_copyrights
+            copyrightInfo: this.m_copyrights,
+            decoder: new OmvTileDecoder()
         });
 
         if (this.m_mapView !== null) {

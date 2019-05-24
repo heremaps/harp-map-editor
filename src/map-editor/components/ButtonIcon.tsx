@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import * as React from "react";
-import { FiCheckSquare, FiCopy, FiSidebar, FiSquare, FiTerminal, FiX } from "react-icons/fi";
+import { FiBox, FiCheckSquare, FiCopy, FiSidebar, FiSquare, FiTerminal, FiX } from "react-icons/fi";
 import {
     IoIosColorPalette,
     IoIosFolderOpen,
@@ -34,7 +34,8 @@ export const ICONS: { [key: string]: React.ComponentFactory<any, any> } = {
     colorPalette: IoIosColorPalette,
     close: FiX,
     undo: IoIosUndo,
-    redo: IoIosRedo
+    redo: IoIosRedo,
+    geometries: FiBox,
 };
 
 export type EventCallBack = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
