@@ -35,7 +35,7 @@ export const ICONS: { [key: string]: React.ComponentFactory<any, any> } = {
     close: FiX,
     undo: IoIosUndo,
     redo: IoIosRedo,
-    geometries: FiBox,
+    geometries: FiBox
 };
 
 export type EventCallBack = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;

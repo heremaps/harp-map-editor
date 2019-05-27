@@ -8,7 +8,7 @@ import { OmvProtobufDataAdapter } from "@here/harp-omv-datasource/lib/OmvData";
 import {
     IGeometryProcessor,
     ILineGeometry,
-    IPolygonGeometry,
+    IPolygonGeometry
 } from "@here/harp-omv-datasource/lib/IGeometryProcessor";
 
 //
@@ -30,11 +30,9 @@ class Decoder implements IGeometryProcessor {
     }
 
     private dump(type: string, layer: string, env: MapEnv) {
-
-        geometryList[ layer ] = geometryList[ layer ] || {};
-        geometryList[ layer ][ type ] = geometryList[ layer ][ type ] || [];
-        geometryList[ layer ][ type ].push( env.entries );
-
+        geometryList[layer] = geometryList[layer] || {};
+        geometryList[layer][type] = geometryList[layer][type] || [];
+        geometryList[layer][type].push(env.entries);
     }
 }
 
@@ -44,7 +42,7 @@ class Decoder implements IGeometryProcessor {
  * @param level The storage level.
  */
 
-async function dumpTile( geoPoint: GeoCoordinates, level: number) {
+async function dumpTile(geoPoint: GeoCoordinates, level: number) {
     const tileKey = webMercatorTilingScheme.getTileKey(geoPoint, level);
 
     if (!tileKey) {
@@ -53,26 +51,22 @@ async function dumpTile( geoPoint: GeoCoordinates, level: number) {
 
     geometryList = {};
     const geoBox = webMercatorTilingScheme.getGeoBox(tileKey);
-    const buffer = await dataProvider.getTile(tileKey) as ArrayBuffer;
+    const buffer = (await dataProvider.getTile(tileKey)) as ArrayBuffer;
     const decoder = new Decoder();
     const adapter = new OmvProtobufDataAdapter(decoder);
 
     adapter.process(buffer, tileKey, geoBox);
 }
 
-export const getGeometryData = ( mapView: MapView, dataSource: OmvDataSource ) : void => {
-
+export const getGeometryData = (mapView: MapView, dataSource: OmvDataSource): void => {
     const geoPoint = new GeoCoordinates(
-        mapView.geoCenter.latitude % 180, mapView.geoCenter.longitude % 180
+        mapView.geoCenter.latitude % 180,
+        mapView.geoCenter.longitude % 180
     );
     dataProvider = dataProvider || dataSource.dataProvider();
 
-    dumpTile(geoPoint, Math.min( mapView.storageLevel, 15 ) )
-    .catch(err => {
-
+    dumpTile(geoPoint, Math.min(mapView.storageLevel, 15)).catch(err => {
         // tslint:disable-next-line
         console.log(err);
-
     });
-
 };

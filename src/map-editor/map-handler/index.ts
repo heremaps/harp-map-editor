@@ -18,7 +18,7 @@ import { EventEmitter } from "events";
 import { throttle } from "throttle-debounce";
 import settings from "../Settings";
 import textEditor from "../TextEditor";
-import { getGeometryData } from './MapGeometryList';
+import { getGeometryData } from "./MapGeometryList";
 import MapViewState from "./MapViewState";
 
 export const logger = LoggerManager.instance.create("MapHandler");
@@ -148,14 +148,9 @@ class MapHandler extends EventEmitter {
             })
         );
 
-        this.m_mapView.addEventListener(
-            MapViewEventNames.MovementFinished,
-            () => {
-
-                getGeometryData( this.m_mapView as MapView, this.m_datasource as OmvDataSource );
-
-            }
-        );
+        this.m_mapView.addEventListener(MapViewEventNames.MovementFinished, () => {
+            getGeometryData(this.m_mapView as MapView, this.m_datasource as OmvDataSource);
+        });
 
         settings.on("setting:textEditor:sourceCode", this.rebuildMap);
         settings.on("setting:editorCurrentStyle", this.rebuildMap);

@@ -212,7 +212,7 @@ export default class extends Component<{}, Props> {
                     options: {},
                     component: (
                         <div className="geometries-list-popup-content-wrapper">
-                            <JSONTree data={ geometryList } />
+                            <JSONTree data={geometryList} />
                         </div>
                     )
                 };
