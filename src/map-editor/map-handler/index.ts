@@ -22,6 +22,7 @@ import { getGeometryData } from "./MapGeometryList";
 import MapViewState from "./MapViewState";
 
 export const logger = LoggerManager.instance.create("MapHandler");
+type Events = "init" | "mapRemoved" | "mapCreated";
 
 /**
  * Manages the Map.
@@ -32,9 +33,6 @@ class MapHandler extends EventEmitter {
     }
 
     get controls() {
-        if (this.m_controls === null) {
-            throw new Error();
-        }
         return this.m_controls;
     }
 
@@ -43,11 +41,9 @@ class MapHandler extends EventEmitter {
     }
 
     get mapView() {
-        if (this.m_mapView === null) {
-            throw new Error();
-        }
         return this.m_mapView;
     }
+
     private m_canvasElem: HTMLCanvasElement | null = null;
     private m_copyrightElem: HTMLDivElement | null = null;
     /**
@@ -66,11 +62,25 @@ class MapHandler extends EventEmitter {
      */
     private m_datasource: OmvDataSource | null = null;
     private m_copyrights: CopyrightInfo[];
+    private m_copyrightHandler: CopyrightElementHandler | null = null;
 
     /**
-     * Updates map theme and clears the map cache.
+     * Removes the old map and create a new map with current theme.
      */
     private rebuildMap: () => void;
+
+    /**
+     * Callback for [[MapView]] [[MapViewEventNames.Render]] event that saves the current state of
+     * map camera;
+     */
+    private onMapRender: () => void;
+
+    /**
+     * Notifying the editor that the camera position is changed.
+     */
+    private emitStateUpdate: () => void;
+
+    private onMovementFinished: () => void;
 
     constructor() {
         super();
@@ -82,20 +92,114 @@ class MapHandler extends EventEmitter {
             link: "https://legal.here.com/terms"
         };
 
-        this.rebuildMap = () => {
-            const source = textEditor.getValue();
-            try {
-                const themeData = JSON.parse(source) as Theme;
-                this.m_mapView!.theme = themeData;
-                this.setDatasourceAndStyle(settings.get("editorCurrentStyle"));
-                this.m_mapView!.clearTileCache();
-                this.m_mapView!.update();
-            } catch (error) {
-                /* */
+        this.m_copyrights = [hereCopyrightInfo];
+
+        this.onMapRender = () => {
+            if (this.m_mapView === null || this.m_controls === null) {
+                return;
             }
+            const state = new MapViewState(
+                this.m_mapView.zoomLevel,
+                this.m_mapView.geoCenter,
+                this.m_controls.yawPitchRoll.yaw,
+                this.m_controls.yawPitchRoll.pitch
+            );
+            this.m_mapViewState = state;
+            this.emitStateUpdate();
         };
 
-        this.m_copyrights = [hereCopyrightInfo];
+        this.rebuildMap = () => {
+            if (this.m_canvasElem === null || this.m_copyrightElem === null) {
+                return;
+            }
+
+            if (this.m_datasource !== null && this.m_mapView !== null) {
+                this.m_mapView.removeDataSource(this.m_datasource);
+                this.m_datasource = null;
+            }
+
+            if (this.m_mapView !== null) {
+                this.m_mapView.removeEventListener(MapViewEventNames.Render, this.onMapRender);
+                this.m_mapView.removeEventListener(
+                    MapViewEventNames.MovementFinished,
+                    this.onMovementFinished
+                );
+
+                this.m_mapView.dispose();
+                this.m_mapView = null;
+            }
+
+            if (this.m_controls !== null) {
+                this.m_controls.dispose();
+                this.m_controls = null;
+            }
+
+            if (this.m_copyrightHandler !== null) {
+                this.m_copyrightHandler.destroy();
+                this.m_copyrightHandler = null;
+            }
+
+            this.emit("mapRemoved");
+
+            const style = settings.get("editorCurrentStyle");
+
+            let theme;
+            try {
+                const src = textEditor.getValue();
+                theme = JSON.parse(src) as Theme;
+            } catch (err) {
+                logger.error(err);
+            }
+
+            this.m_mapView = new MapView({
+                canvas: this.m_canvasElem,
+                decoderUrl: "decoder.bundle.js",
+                theme
+            });
+
+            this.m_controls = new MapControls(this.m_mapView);
+            this.m_controls.enabled = true;
+
+            this.m_controls.setRotation(this.m_mapViewState.yaw, this.m_mapViewState.pitch);
+
+            this.m_mapView.setCameraGeolocationAndZoom(
+                this.m_mapViewState.center,
+                this.m_mapViewState.zoom
+            );
+
+            this.m_datasource = new OmvDataSource({
+                baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
+                apiFormat: APIFormat.XYZOMV,
+                styleSetName: style === "" ? undefined : style,
+                maxZoomLevel: 17,
+                authenticationCode: "AYlqpxvwl7C8tSVG22lX2lg",
+                copyrightInfo: this.m_copyrights,
+                decoder: new OmvTileDecoder()
+            });
+
+            this.m_copyrightHandler = CopyrightElementHandler.install(
+                this.m_copyrightElem,
+                this.m_mapView
+            );
+
+            this.m_mapView.addEventListener(
+                MapViewEventNames.MovementFinished,
+                this.onMovementFinished
+            );
+
+            this.m_mapView.addDataSource(this.m_datasource);
+            this.m_mapView.addEventListener(MapViewEventNames.Render, this.onMapRender);
+
+            this.emit("mapCreated");
+        };
+
+        this.emitStateUpdate = throttle(500, () => {
+            settings.set("editorMapViewState", this.m_mapViewState.toString());
+        });
+
+        this.onMovementFinished = () => {
+            getGeometryData(this.m_mapView as MapView, this.m_datasource as OmvDataSource);
+        };
     }
 
     /**
@@ -105,55 +209,10 @@ class MapHandler extends EventEmitter {
         this.m_canvasElem = canvas;
         this.m_copyrightElem = copyrightElem;
 
-        let theme;
-
-        try {
-            const src = textEditor.getValue();
-            theme = JSON.parse(src) as Theme;
-        } catch (err) {
-            logger.error(err);
-        }
-
-        this.m_mapView = new MapView({
-            canvas,
-            decoderUrl: "decoder.bundle.js",
-            theme
-        });
-
-        CopyrightElementHandler.install(this.m_copyrightElem, this.m_mapView);
-
-        this.setDatasourceAndStyle(settings.get("editorCurrentStyle"));
-
-        this.m_controls = new MapControls(this.m_mapView);
-        this.m_controls.enabled = true;
-
-        this.m_controls.setRotation(this.m_mapViewState.yaw, this.m_mapViewState.pitch);
-
-        this.m_mapView.setCameraGeolocationAndZoom(
-            this.m_mapViewState.center,
-            this.m_mapViewState.zoom
-        );
-
-        this.m_mapView.addEventListener(
-            MapViewEventNames.Render,
-            throttle(500, () => {
-                const state = new MapViewState(
-                    this.m_mapView!.zoomLevel,
-                    this.m_mapView!.geoCenter,
-                    this.m_controls!.yawPitchRoll.yaw,
-                    this.m_controls!.yawPitchRoll.pitch
-                );
-                this.m_mapViewState = state;
-                settings.set("editorMapViewState", state.toString());
-            })
-        );
-
-        this.m_mapView.addEventListener(MapViewEventNames.MovementFinished, () => {
-            getGeometryData(this.m_mapView as MapView, this.m_datasource as OmvDataSource);
-        });
-
         settings.on("setting:textEditor:sourceCode", this.rebuildMap);
         settings.on("setting:editorCurrentStyle", this.rebuildMap);
+
+        this.rebuildMap();
 
         this.emit("init");
     }
@@ -162,11 +221,14 @@ class MapHandler extends EventEmitter {
      * Return userData of the clicked element;
      */
     intersect(event: MouseEvent) {
-        const rect = this.m_canvasElem!.getBoundingClientRect();
+        if (this.m_canvasElem === null || this.m_mapView === null) {
+            return null;
+        }
+        const rect = this.m_canvasElem.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
-        const intersectionResults = this.m_mapView!.intersectMapObjects(x, y);
+        const intersectionResults = this.m_mapView.intersectMapObjects(x, y);
         if (!intersectionResults || intersectionResults.length === 0) {
             return null;
         }
@@ -181,28 +243,20 @@ class MapHandler extends EventEmitter {
         this.m_mapView.resize(width, height);
     }
 
-    /**
-     * Replacing the map data source with each map theme update for having the appropriate
-     * styleSetName on the datasource.
-     */
-    private setDatasourceAndStyle(style: string) {
-        if (this.m_datasource !== null && this.m_mapView) {
-            this.m_mapView.removeDataSource(this.m_datasource);
-        }
+    emit(event: Events, ...args: any[]) {
+        return super.emit(event, ...args);
+    }
 
-        this.m_datasource = new OmvDataSource({
-            baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
-            apiFormat: APIFormat.XYZOMV,
-            styleSetName: style === "" ? undefined : style,
-            maxZoomLevel: 17,
-            authenticationCode: "AYlqpxvwl7C8tSVG22lX2lg",
-            copyrightInfo: this.m_copyrights,
-            decoder: new OmvTileDecoder()
-        });
+    on(event: Events, listener: (...args: any[]) => void): this {
+        return super.on(event, listener);
+    }
 
-        if (this.m_mapView !== null) {
-            this.m_mapView.addDataSource(this.m_datasource);
-        }
+    once(event: Events, listener: (...args: any[]) => void): this {
+        return super.once(event, listener);
+    }
+
+    removeListener(event: Events, listener: (...args: any[]) => void): this {
+        return super.removeListener(event, listener);
     }
 }
 

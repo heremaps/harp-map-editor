@@ -17,6 +17,10 @@ export default class extends Component<any, SettingsState> {
     private m_elemMap: HTMLDivElement | null = null;
     private m_elemCopyright: HTMLDivElement | null = null;
     private m_controlsContainer: HTMLDivElement | null = null;
+    private m_mapControlsUI: MapControlsUI | null = null;
+
+    private onMapRemoved: () => void;
+    private onMapCreated: () => void;
 
     constructor(props: {}) {
         super(props);
@@ -25,38 +29,60 @@ export default class extends Component<any, SettingsState> {
             settings: {},
             store: {}
         };
+
+        this.onMapRemoved = () => {
+            if (this.m_mapControlsUI !== null) {
+                // TODO: dispose to avoid memory leak. Uncomment next line after next release.
+                // this.m_mapControlsUI.dispose();
+                this.m_mapControlsUI.domElement.remove();
+            }
+        };
+
+        this.onMapCreated = () => {
+            if (this.m_controlsContainer === null || this.m_elemCopyright === null) {
+                throw new Error();
+            }
+
+            if (MapHandler.elem === null) {
+                const elem = document.querySelector("#map-container .map") as HTMLCanvasElement;
+                if (elem === null) {
+                    throw new Error();
+                }
+                MapHandler.init(elem, this.m_elemCopyright);
+            } else {
+                const elem = document.getElementById("map-container");
+                if (elem === null) {
+                    throw new Error();
+                }
+                const canvas = elem.querySelector("canvas");
+                if (canvas !== null) {
+                    elem.removeChild(canvas);
+                }
+                elem.appendChild(MapHandler.elem);
+            }
+
+            if (MapHandler.controls === null || MapHandler.mapView === null) {
+                throw new Error();
+            }
+
+            this.m_mapControlsUI = new MapControlsUI(MapHandler.controls, { zoomLevel: "input" });
+            this.m_controlsContainer.appendChild(this.m_mapControlsUI.domElement);
+        };
     }
 
     componentDidMount() {
         this.connectSettings(["editorTabVisible", "editorTabSize", "editorTabSide"]);
 
-        if (this.m_elemCopyright === null) {
-            throw new Error();
-        }
-
-        if (MapHandler.elem === null) {
-            const elem = document.querySelector("#map-container .map") as HTMLCanvasElement;
-            if (elem === null) {
-                throw new Error();
-            }
-            MapHandler.init(elem, this.m_elemCopyright);
-        } else {
-            const elem = document.getElementById("map-container");
-            if (elem === null) {
-                throw new Error();
-            }
-            elem.innerHTML = "";
-            elem.appendChild(MapHandler.elem);
-        }
-
-        const ui = new MapControlsUI(MapHandler.controls, { zoomLevel: "input" });
-        this.m_controlsContainer!.appendChild(ui.domElement);
-
         this.setPadding();
+
+        MapHandler.on("mapCreated", this.onMapCreated);
+        MapHandler.on("mapRemoved", this.onMapRemoved);
 
         window.addEventListener("resize", () => {
             this.setPadding();
         });
+
+        this.onMapCreated();
     }
 
     render() {
