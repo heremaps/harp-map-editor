@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import * as React from "react";
-import JSONTree from "react-json-tree";
-import { Popup, Side } from "../../types";
+import { Popup, Side, TechniqueData } from "../../types";
 import Component, { SettingsState } from "../Component";
 import ButtonIcon, { ButtonIconProps, ICONS } from "../components/ButtonIcon";
-import { geometryList } from "../map-handler/MapGeometryList";
 import settings from "../Settings";
 import TextEditor from "../TextEditor";
+import PopupCreateTechnique from "./PopupCreateTechnique";
+import PopupGeometriesList from "./PopupGeometriesList";
+import PopupsContainer from "./PopupsContainer";
 import PopupSelectTheme from "./PopupSelectTheme";
 
 enum MenuState {
@@ -26,7 +27,21 @@ interface Props extends SettingsState {
 /**
  * Shows currently available actions for the user.
  */
-export default class extends Component<{}, Props> {
+export default class Menu extends Component<{}, Props> {
+    static openNewTechniquePopup(techniqueData?: TechniqueData) {
+        const popup: Popup = {
+            name: "Create technique",
+            options: { exitGuard: "closeButton" },
+            component: (
+                <PopupCreateTechnique
+                    done={() => PopupsContainer.removePopup(popup)}
+                    techniqueData={techniqueData}
+                />
+            )
+        };
+        PopupsContainer.addPopup(popup);
+    }
+
     constructor(props: {}) {
         super(props);
 
@@ -44,13 +59,15 @@ export default class extends Component<{}, Props> {
             "editorTabSide",
             "editorInfoPick"
         ]);
-        this.connectStore(["styles"]);
+        this.connectStore(["styles", "parsedTheme"]);
     }
 
     render() {
         const editorTabSide = this.state.settings.editorTabSide as Side;
         const editorTabVisible = this.state.settings.editorTabVisible as boolean;
         let menuState = this.state.menuState;
+
+        const themeIsValid = this.state.store.parsedTheme !== null;
 
         let buttons: ButtonIconProps[] = [
             {
@@ -70,9 +87,12 @@ export default class extends Component<{}, Props> {
         switch (menuState) {
             case MenuState.Idle:
                 buttons.unshift(
+                    this.createGeometriesPopupButton(!themeIsValid),
+                    this.createThemePopupButton(!themeIsValid),
                     {
                         icon: ICONS.download,
                         title: "Download file",
+                        disabled: !themeIsValid,
                         onClick: () => {
                             TextEditor.download();
                         }
@@ -87,6 +107,7 @@ export default class extends Component<{}, Props> {
                     {
                         icon: ICONS.format,
                         title: "Format file",
+                        disabled: !themeIsValid,
                         onClick: () => {
                             TextEditor.formatFile();
                         }
@@ -127,13 +148,14 @@ export default class extends Component<{}, Props> {
                         onClick: () => {
                             TextEditor.redo();
                         }
+                    },
+                    {
+                        icon: ICONS.magicStick,
+                        title: "Construct new style technique",
+                        disabled: !themeIsValid,
+                        onClick: () => Menu.openNewTechniquePopup()
                     }
                 );
-
-                if (this.state.store.styles !== null) {
-                    buttons.unshift(this.createThemePopup());
-                    buttons.unshift(this.createGeometriesPopup());
-                }
                 break;
 
             case MenuState.SelectSide:
@@ -164,6 +186,7 @@ export default class extends Component<{}, Props> {
                             icon={item.icon}
                             title={item.title}
                             className={item.className}
+                            disabled={item.disabled}
                             active={item.active}
                             onClick={item.onClick}
                         />
@@ -173,51 +196,36 @@ export default class extends Component<{}, Props> {
         );
     }
 
-    private createThemePopup(): ButtonIconProps {
+    private createThemePopupButton(disabled: boolean): ButtonIconProps {
         return {
             icon: ICONS.colorPalette,
             title: "Switch styles / Load default theme",
+            disabled,
             onClick: () => {
-                const popups = settings.getStoreData("popups")!.slice();
                 const popup = {
                     name: "Switch styles",
                     options: {},
-                    component: (
-                        <PopupSelectTheme
-                            done={() => {
-                                settings.setStoreData(
-                                    "popups",
-                                    settings
-                                        .getStoreData("popups")!
-                                        .filter((item: Popup) => item !== popup)
-                                );
-                            }}
-                        />
-                    )
+                    component: <PopupSelectTheme done={() => PopupsContainer.removePopup(popup)} />
                 };
-                popups.push(popup);
-                settings.setStoreData("popups", popups);
+                PopupsContainer.addPopup(popup);
             }
         };
     }
 
-    private createGeometriesPopup(): ButtonIconProps {
+    private createGeometriesPopupButton(disabled: boolean): ButtonIconProps {
         return {
             icon: ICONS.geometries,
             title: "Geometries list",
+            disabled,
             onClick: () => {
-                const popups = settings.getStoreData("popups")!.slice();
                 const popup = {
                     name: "Geometries list",
                     options: {},
                     component: (
-                        <div className="geometries-list-popup-content-wrapper">
-                            <JSONTree data={geometryList} />
-                        </div>
+                        <PopupGeometriesList done={() => PopupsContainer.removePopup(popup)} />
                     )
                 };
-                popups.push(popup);
-                settings.setStoreData("popups", popups);
+                PopupsContainer.addPopup(popup);
             }
         };
     }

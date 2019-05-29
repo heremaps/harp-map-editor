@@ -3,6 +3,7 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Theme } from "@here/harp-datasource-protocol";
 import * as theme from "@here/harp-map-theme/resources/berlin_tilezen_base.json";
 import { EventEmitter } from "events";
 import { throttle } from "throttle-debounce";
@@ -32,7 +33,7 @@ export interface AvailableSetting {
     /**
      * Current style from theme that currently uses the data source.
      */
-    editorCurrentStyle: string;
+    editorCurrentStyle: string | null;
     /**
      * Current column of the text editor cursor.
      */
@@ -83,14 +84,19 @@ export interface AvailableData {
      * Contains current available styles from the map theme.
      */
     styles: string[];
+    /**
+     * Last parsed source code of the theme. If equals [[null]] then the source code probably
+     * invalid [[JSON]].
+     */
+    parsedTheme: Theme | null;
 }
 
-type Setting = string | number | boolean | Side;
+type Setting = string | number | boolean | Side | null;
 
 /**
  * Manages settings and store data, allow to observe changes thru events.
  */
-class Settings<SType> extends EventEmitter {
+class Settings<SType, StType> extends EventEmitter {
     //Key where to save user settings in localStore.
     readonly m_settingsName = "editorSettings";
 
@@ -106,17 +112,21 @@ class Settings<SType> extends EventEmitter {
     /**
      * The data store.
      */
-    private m_store: { [Key in keyof AvailableData]?: AvailableData[Key] } = {};
+    private m_store: { [Key in keyof StType]?: StType[Key] };
 
     /**
      * Saves the settings data to localStore asynchronously
      */
     private save: () => void;
 
-    constructor(settingsDefaults: SType) {
+    constructor(
+        settingsDefaults: SType,
+        initialStoreData: { [Key in keyof StType]?: StType[Key] }
+    ) {
         super();
 
         this.m_settings = settingsDefaults;
+        this.m_store = initialStoreData;
 
         this.load();
 
@@ -164,7 +174,7 @@ class Settings<SType> extends EventEmitter {
     /**
      * Sets specified data to the store by specified key.
      */
-    setStoreData<A extends keyof AvailableData, B extends AvailableData[A]>(key: A, val: B) {
+    setStoreData<A extends keyof StType, B extends StType[A]>(key: A, val: B) {
         if (this.m_store[key] === val) {
             return val;
         }
@@ -178,7 +188,7 @@ class Settings<SType> extends EventEmitter {
     /**
      * Returns store data of specified key.
      */
-    getStoreData<A extends keyof AvailableData, B extends AvailableData[A]>(key: A): B | undefined {
+    getStoreData<A extends keyof StType, B extends StType[A]>(key: A): B | undefined {
         if (this.m_store.hasOwnProperty(key)) {
             return this.m_store[key] as B;
         }
@@ -201,10 +211,10 @@ class Settings<SType> extends EventEmitter {
     /**
      * Get multiple entries from store at once.
      */
-    readStore<A extends keyof AvailableData, B extends AvailableData[A]>(
+    readStore<A extends keyof StType, B extends StType[A]>(
         list: A[]
-    ): { [key in A]?: AvailableData[key] } {
-        const res: { [key in A]?: B } = {};
+    ): { [key in keyof StType]?: StType[key] } {
+        const res: { [key in keyof StType]?: StType[key] } = {};
         for (const key of list) {
             if (this.m_store.hasOwnProperty(key)) {
                 res[key] = this.m_store[key] as B;
@@ -238,22 +248,22 @@ class Settings<SType> extends EventEmitter {
 }
 
 // Create settings manager with defaults
-const settings = new Settings<AvailableSetting>({
-    editorTabSide: Side.Left,
-    editorTabSize: 600,
-    editorTabVisible: true,
-    editorInfoPick: false,
-    editorCurrentStyle: "",
-    editorMapViewState: new MapViewState().toString(),
-    accessKeyId: "",
-    accessKeySecret: "",
-    "textEditor:column": 1,
-    "textEditor:line": 1,
-    "textEditor:sourceCode": JSON.stringify(theme as any, undefined, 4)
-});
-
-settings.setStoreData("popups", []);
-settings.setStoreData("styles", []);
+const settings = new Settings<AvailableSetting, AvailableData>(
+    {
+        editorTabSide: Side.Left,
+        editorTabSize: 600,
+        editorTabVisible: true,
+        editorInfoPick: false,
+        editorCurrentStyle: null,
+        editorMapViewState: new MapViewState().toString(),
+        accessKeyId: "",
+        accessKeySecret: "",
+        "textEditor:column": 1,
+        "textEditor:line": 1,
+        "textEditor:sourceCode": JSON.stringify(theme as any, undefined, 4)
+    },
+    { popups: [], styles: [] }
+);
 
 // Singleton settings manager
 export default settings;
