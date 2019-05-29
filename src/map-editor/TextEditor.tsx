@@ -3,8 +3,11 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
+import { Theme } from "@here/harp-datasource-protocol";
 import { LoggerManager } from "@here/harp-utils";
+import * as React from "react";
 import { Side, WindowCommands } from "../types";
+import PopupsContainer from "./components-smart/PopupsContainer";
 import settings from "./Settings";
 
 export const logger = LoggerManager.instance.create("TextEditor");
@@ -28,6 +31,11 @@ class TextEditor {
      * The source code of current editable theme.
      */
     private m_value = "";
+    /**
+     * Last parsed source code of the theme. If equals [[null]] then the source code probably
+     * invalid [[JSON]].
+     */
+    private m_parsedTheme: Theme | null = null;
 
     /**
      * handles commands of the child text editor
@@ -47,7 +55,7 @@ class TextEditor {
                 return;
             }
 
-            const msg = data.data;
+            const msg: WindowCommands = data.data;
 
             switch (msg.command) {
                 case "Init":
@@ -61,6 +69,10 @@ class TextEditor {
                 case "UpdateSourceValue":
                     this.updateSource(msg.value);
                     settings.set("textEditor:sourceCode", this.m_value);
+                    settings.set("textEditor:column", msg.column);
+                    settings.set("textEditor:line", msg.line);
+                    break;
+                case "UpdateCursorPosition":
                     settings.set("textEditor:column", msg.column);
                     settings.set("textEditor:line", msg.line);
                     break;
@@ -174,7 +186,12 @@ class TextEditor {
                 this.setValue(value);
             })
             .catch(() => {
-                alert("Can't open");
+                const popup = {
+                    name: "ERROR",
+                    options: {},
+                    component: <p>Can't open file.</p>
+                };
+                PopupsContainer.addPopup(popup);
             });
     }
 
@@ -192,33 +209,49 @@ class TextEditor {
         this.sendMsg({ command: "ShowCommands" });
     }
 
+    getParsedTheme() {
+        return this.m_parsedTheme;
+    }
+
+    setCursor(line: number, column: number) {
+        this.sendMsg({
+            command: "SetCursor",
+            column,
+            line
+        });
+    }
+
     /**
      * Updates the available styles list, and sets the proper style.
      */
     private updateSource(source: string) {
         this.m_value = source;
+        this.m_parsedTheme = null;
+        let styles: string[] = [];
 
-        let style = null;
         try {
-            style = JSON.parse(source);
+            this.m_parsedTheme = JSON.parse(source) as Theme;
         } catch (error) {
+            settings.setStoreData("styles", styles);
+            settings.setStoreData("parsedTheme", this.m_parsedTheme);
             return;
         }
 
-        let styles: string[] = [];
-        if (style.styles !== undefined) {
-            const values = Object.values(style.styles);
+        if (this.m_parsedTheme.styles !== undefined) {
+            const values = Object.values(this.m_parsedTheme.styles);
             if (values.length > 0 && values.every(value => Array.isArray(value))) {
-                styles = Object.keys(style.styles);
+                styles = Object.keys(this.m_parsedTheme.styles);
             }
         }
 
         const currentStyle = settings.get("editorCurrentStyle");
 
         settings.setStoreData("styles", styles);
+        settings.setStoreData("parsedTheme", this.m_parsedTheme);
+
         if (styles.length === 0) {
-            settings.set("editorCurrentStyle", "");
-        } else if (currentStyle === "" || !styles.includes(currentStyle)) {
+            settings.set("editorCurrentStyle", null);
+        } else if (currentStyle === null || !styles.includes(currentStyle)) {
             settings.set("editorCurrentStyle", styles[0]);
         }
     }

@@ -3,7 +3,7 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Theme } from "@here/harp-datasource-protocol";
+import { Style, Theme } from "@here/harp-datasource-protocol";
 import { MapControls } from "@here/harp-map-controls";
 import {
     CopyrightElementHandler,
@@ -16,6 +16,8 @@ import { OmvTileDecoder } from "@here/harp-omv-datasource/lib/OmvDecoder";
 import { LoggerManager } from "@here/harp-utils";
 import { EventEmitter } from "events";
 import { throttle } from "throttle-debounce";
+import { WhenPropsData } from "../../types";
+import { accessToken } from "../config";
 import settings from "../Settings";
 import textEditor from "../TextEditor";
 import { getGeometryData } from "./MapGeometryList";
@@ -23,6 +25,8 @@ import MapViewState from "./MapViewState";
 
 export const logger = LoggerManager.instance.create("MapHandler");
 type Events = "init" | "mapRemoved" | "mapCreated";
+
+type AddStyleTechniqueResult = "err" | "ok" | "exists";
 
 /**
  * Manages the Map.
@@ -170,9 +174,9 @@ class MapHandler extends EventEmitter {
             this.m_datasource = new OmvDataSource({
                 baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
                 apiFormat: APIFormat.XYZOMV,
-                styleSetName: style === "" ? undefined : style,
+                styleSetName: style || undefined,
                 maxZoomLevel: 17,
-                authenticationCode: "AYlqpxvwl7C8tSVG22lX2lg",
+                authenticationCode: accessToken,
                 copyrightInfo: this.m_copyrights,
                 decoder: new OmvTileDecoder()
             });
@@ -241,6 +245,60 @@ class MapHandler extends EventEmitter {
             return;
         }
         this.m_mapView.resize(width, height);
+    }
+
+    whenFromKeyVal(data: WhenPropsData) {
+        const keys = ["$geometryType", "$layer", "kind", "kind_detail", "network"];
+
+        return Object.entries(data)
+            .map(([key, val]) => {
+                if (!keys.includes(key)) {
+                    return;
+                }
+                return typeof val === "string" ? `${key} == '${val}'` : `${key} == ${val}`;
+            })
+            .filter(item => item !== undefined)
+            .join(" && ");
+    }
+
+    addStyleTechnique(style: Style): AddStyleTechniqueResult {
+        const theme = textEditor.getParsedTheme();
+        const currentStyle = settings.get("editorCurrentStyle");
+
+        if (
+            theme === null ||
+            currentStyle === null ||
+            theme.styles === undefined ||
+            style.description === undefined
+        ) {
+            return "err";
+        }
+
+        const descriptionIsExist = theme.styles[currentStyle].some(
+            item => item.description === style.description
+        );
+
+        if (descriptionIsExist) {
+            return "exists";
+        }
+
+        theme.styles[currentStyle].push(style);
+
+        const source = JSON.stringify(theme, undefined, 4);
+        textEditor.setValue(source);
+
+        const descriptionKey = `"${currentStyle}"`;
+        const index = source.indexOf(`"${style.description}"`, source.indexOf(descriptionKey));
+
+        if (index > 0) {
+            const lines = source.slice(0, index).split("\n");
+            const symbols = lines[lines.length - 1].slice(
+                lines[lines.length - 1].indexOf(descriptionKey)
+            );
+            textEditor.setCursor(lines.length, symbols.length);
+        }
+
+        return "ok";
     }
 
     emit(event: Events, ...args: any[]) {

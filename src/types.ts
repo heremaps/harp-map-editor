@@ -33,6 +33,12 @@ export interface ShowCommands extends Command {
     command: "ShowCommands";
 }
 
+export interface UpdateCursorPosition extends Command {
+    command: "UpdateCursorPosition";
+    line: number;
+    column: number;
+}
+
 export interface Init extends Command {
     command: "Init";
 }
@@ -42,6 +48,12 @@ export interface InitData extends Command {
     line: number;
     column: number;
     value: string;
+}
+
+export interface SetCursor extends Command {
+    command: "SetCursor";
+    line: number;
+    column: number;
 }
 
 export interface Undo extends Command {
@@ -65,7 +77,9 @@ export type WindowCommands =
     | InitData
     | ShowCommands
     | Undo
-    | Redo;
+    | Redo
+    | UpdateCursorPosition
+    | SetCursor;
 
 /**
  * Contains all available positions for the text editor window
@@ -84,7 +98,37 @@ export enum Side {
 export interface Popup {
     component: JSX.Element;
     name: string;
-    options: {
-        doNotExit?: boolean;
+    options?: {
+        exitGuard?: "doNotExt" | "closeButton";
     };
+}
+
+export type Techniques =
+    | "solid-line"
+    | "dashed-line"
+    | "line"
+    | "fill"
+    | "text"
+    | "labeled-icon"
+    | "none";
+
+export class TechniqueData {
+    layer?: string;
+    geometryType?: GeometryType;
+    technique?: Techniques;
+    description?: string;
+    when?: string;
+}
+
+export type GeometryType = "line" | "polygon" | "point";
+
+export interface WhenPropsData {
+    $geometryType: GeometryType;
+    $layer: string;
+    $id?: number;
+    $level?: number;
+    min_zoom?: number;
+    kind?: string;
+    kind_detail?: string;
+    network?: string;
 }
