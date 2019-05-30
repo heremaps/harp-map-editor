@@ -15,8 +15,7 @@ const commonConfig = {
     },
     devtool: "inline-source-map",
     module: {
-        rules: [
-            {
+        rules: [{
                 test: /\.scss$/,
                 use: [
                     "style-loader", // creates style nodes from JS strings
@@ -24,13 +23,22 @@ const commonConfig = {
                     "sass-loader" // compiles Sass to CSS, using Node Sass by default
                 ]
             },
-            { test: /\.tsx?$/, loader: ["ts-loader",], },
-            { test: /\.css$/, loader: ["style-loader", "css-loader",], },
+            {
+                test: /\.tsx?$/,
+                loader: "ts-loader",
+                exclude: /node_modules/,
+                options: {
+                    onlyCompileBundledFiles: true,
+                }
+            },
+            {
+                test: /\.css$/,
+                loader: ["style-loader", "css-loader", ],
+            },
         ],
     },
     plugins: [
-        new CopyWebpackPlugin([
-            {
+        new CopyWebpackPlugin([{
                 from: "node_modules/@here/harp-map-theme/resources",
                 to: ".",
                 toType: "dir"
@@ -80,11 +88,15 @@ const decoderConfig = {
         extensions: [".ts", ".js"],
     },
     module: {
-        rules: [
-            { test: /\.tsx?$/, loader: "ts-loader" },
-        ]
+        rules: [{
+            test: /\.tsx?$/,
+            loader: "ts-loader",
+            exclude: /node_modules/,
+            options: {
+                onlyCompileBundledFiles: true,
+            }
+        }]
     },
 };
 
 module.exports = [mapEditorConfig, textEditorFrameConfig, decoderConfig];
-
