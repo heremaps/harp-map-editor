@@ -1,9 +1,12 @@
 $bg-color: #333;
 $bg-hover-color: #345;
 $icon-color: #fff;
+$icon-disabled: rgba($color: $icon-color, $alpha: 0.5);
 $icon-active: #77f;
 $step: 32px;
 $separator-size: $step * 0.25 * 0.5;
+$font-size: $step * 0.5;
+
 
 *>* {
     border: 0px;
@@ -30,7 +33,41 @@ body {
     background-color: $bg-hover-color;
     color: $icon-color;
     font-family: monospace;
-    font-size: $step * 0.5;
+    font-size: $font-size;
+
+    .select-list {
+        list-style: none;
+
+        li {
+
+            // a{
+            //     text-decoration: none;
+            // }
+            a:hover {
+                text-decoration: none;
+            }
+        }
+    }
+
+
+    a {
+        color: $icon-color;
+    }
+
+    p {
+        margin: $separator-size 0;
+    }
+
+    .popup-input {
+        font-size: $step * 0.75;
+        font-size: $step * 0.25;
+        color: $bg-color;
+        background-color: $icon-color;
+        font-size: $font-size;
+        width: 100%;
+
+    }
+
 }
 
 #menu {
@@ -241,6 +278,7 @@ body {
         opacity: 0.5;
         padding: 2px;
     }
+
     #copyright:hover {
         opacity: 1;
         background-color: $bg-color;
@@ -325,6 +363,16 @@ body {
     display: block;
 }
 
+.button-icon.small {
+    color: $icon-color;
+    font-size: $step * 0.5;
+    outline: none;
+    width: $step * 0.75;
+    height: $step * 0.75;
+    background-color: $bg-color;
+    display: block;
+}
+
 .button-icon.active {
     background-color: $icon-active;
 }
@@ -333,8 +381,16 @@ body {
     color: $icon-active;
 }
 
+.button-icon.disabled {
+    color: $icon-disabled;
+}
+
 .button-icon:hover {
     background-color: $bg-hover-color;
+}
+
+.button-icon.disabled:hover {
+    background-color: $bg-color;
 }
 
 .popup {
@@ -370,6 +426,28 @@ body {
 
         .content {
             padding: $step * 0.25;
+            max-height: 80vh;
+            max-width: 80vw;
+            overflow: auto;
+
+            .info {
+                max-width: 800px;
+                max-height: 600px;
+                overflow: auto;
+
+                ul {
+                    list-style: none;
+                    padding-left: $step;
+
+                    li {
+                        padding-left: $step;
+                    }
+                }
+
+                section+section {
+                    margin-top: $step * 0.5;
+                }
+            }
         }
     }
 
@@ -402,29 +480,5 @@ body {
 
     .tab-content {
         padding: $step * 0.5;
-    }
-}
-
-.select-list {
-    list-style: none;
-}
-
-
-a {
-    color: $icon-color;
-}
-
-p {
-    margin: $separator-size 0;
-}
-
-//
-
-.geometries-list-popup-content-wrapper {
-    width: 450px;
-    height: 400px;
-    overflow-y: scroll;
-    .content {
-        width: 100%;
     }
 }

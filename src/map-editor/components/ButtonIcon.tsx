@@ -7,6 +7,7 @@ import * as React from "react";
 import { FiBox, FiCheckSquare, FiCopy, FiSidebar, FiSquare, FiTerminal, FiX } from "react-icons/fi";
 import {
     IoIosColorPalette,
+    IoIosColorWand,
     IoIosFolderOpen,
     IoIosRedo,
     IoIosUndo,
@@ -35,7 +36,8 @@ export const ICONS: { [key: string]: React.ComponentFactory<any, any> } = {
     close: FiX,
     undo: IoIosUndo,
     redo: IoIosRedo,
-    geometries: FiBox
+    geometries: FiBox,
+    magicStick: IoIosColorWand
 };
 
 export type EventCallBack = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -46,10 +48,12 @@ export interface ButtonIconProps {
     onClick?: EventCallBack;
     title?: string;
     className?: string;
+    disabled?: boolean;
 }
 
 export default class extends React.Component<ButtonIconProps> {
     render() {
+        const { onClick, title, disabled, active } = this.props;
         const Icon = this.props.icon;
         let className = "button-icon";
 
@@ -57,8 +61,10 @@ export default class extends React.Component<ButtonIconProps> {
             throw new Error();
         }
 
-        if (this.props.active) {
+        if (active) {
             className += " active";
+        } else if (disabled) {
+            className += " disabled";
         }
 
         if (this.props.className) {
@@ -66,7 +72,7 @@ export default class extends React.Component<ButtonIconProps> {
         }
 
         return (
-            <div className={className} onClick={this.props.onClick!} title={this.props.title!}>
+            <div className={className} onClick={disabled ? undefined : onClick} title={title}>
                 <Icon />
             </div>
         );

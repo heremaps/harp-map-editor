@@ -12,7 +12,30 @@ import settings from "../Settings";
 /**
  * Responsible for showing popups on top of the other elements.
  */
-export default class extends Component<any, SettingsState> {
+export default class PopupsContainer extends Component<any, SettingsState> {
+    static alertPopup(name: string, message: string) {
+        const popups = settings.getStoreData("popups")!.slice();
+        popups.push({
+            name,
+            component: <span>{message}</span>,
+            options: {}
+        });
+        settings.setStoreData("popups", popups);
+    }
+
+    static addPopup(popup: Popup) {
+        const popups = settings.getStoreData("popups")!.slice();
+        popups.push(popup);
+        settings.setStoreData("popups", popups);
+    }
+
+    static removePopup(popup: Popup) {
+        settings.setStoreData(
+            "popups",
+            settings.getStoreData("popups")!.filter((item: Popup) => item !== popup)
+        );
+    }
+
     constructor(props: {}) {
         super(props);
         this.state = {
@@ -27,8 +50,11 @@ export default class extends Component<any, SettingsState> {
             }
 
             const popup = popups[popups.length - 1];
-            this.removePopup(popup);
-            event.preventDefault();
+            const options = popup.options || {};
+            if (options.exitGuard === undefined) {
+                this.closePopup(popup);
+                event.preventDefault();
+            }
         });
     }
 
@@ -42,22 +68,31 @@ export default class extends Component<any, SettingsState> {
         return (
             <div id="popups">
                 {popups.map((popup, i) => {
+                    const options = popup.options || {};
+                    const exitButton =
+                        options.exitGuard === undefined || options.exitGuard === "closeButton";
                     return (
-                        <div key={i} className="popup" onClick={() => this.removePopup(popup)}>
-                            <section
-                                className={
-                                    "window" + (popup.options.doNotExit ? "" : " close-button")
+                        <div
+                            key={i}
+                            className="popup"
+                            onClick={() => {
+                                if (options.exitGuard === undefined) {
+                                    this.closePopup(popup);
                                 }
+                            }}
+                        >
+                            <section
+                                className={"window" + (exitButton ? " close-button" : "")}
                                 onClick={event => event.stopPropagation()}
                             >
                                 <header>{popup.name}</header>
-                                {popup.options.doNotExit ? null : (
+                                {exitButton ? (
                                     <ButtonIcon
                                         icon={ICONS.close}
                                         title="Close"
-                                        onClick={event => this.removePopup(popup)}
+                                        onClick={event => this.closePopup(popup)}
                                     />
-                                )}
+                                ) : null}
                                 <div className="content">{popup.component}</div>
                             </section>
                         </div>
@@ -67,11 +102,10 @@ export default class extends Component<any, SettingsState> {
         );
     }
 
-    private removePopup(popup: Popup) {
-        if (popup.options.doNotExit) {
+    private closePopup(popup: Popup) {
+        if (popup.options && popup.options.exitGuard === "doNotExt") {
             return;
         }
-        const popups = (this.state.store.popups as Popup[]).filter(item => item !== popup);
-        settings.setStoreData("popups", popups);
+        PopupsContainer.removePopup(popup);
     }
 }

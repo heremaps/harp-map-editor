@@ -60,18 +60,24 @@ export default class TextEditor {
                 const code = this.m_editor!.getValue();
                 const change = event.changes[event.changes.length - 1];
 
-                // Prevent sending incorrect json data
-                try {
-                    JSON.parse(code);
-                    this.sendMsg({
-                        command: "UpdateSourceValue",
-                        line: change.range.startLineNumber,
-                        column: change.range.startColumn,
-                        value: code
-                    });
-                } catch (error) {
-                    /* */
-                }
+                this.sendMsg({
+                    command: "UpdateSourceValue",
+                    line: change.range.startLineNumber,
+                    column: change.range.startColumn,
+                    value: code
+                });
+            })
+        );
+
+        // When cursor position is changing sends the changes to the Theme editor
+        this.m_editor.onDidChangeCursorPosition(
+            // Prevents too frequent code source updating
+            throttle(1000, (event: monaco.editor.ICursorPositionChangedEvent) => {
+                this.sendMsg({
+                    command: "UpdateCursorPosition",
+                    line: event.position.lineNumber,
+                    column: event.position.column
+                });
             })
         );
 
@@ -95,6 +101,11 @@ export default class TextEditor {
                 this.m_editor!.setValue(msg.value);
                 this.m_editor!.setPosition(position);
                 this.m_editor!.revealPositionInCenter(position);
+                break;
+            case "SetCursor":
+                const cursorPosition = { lineNumber: msg.line, column: msg.column };
+                this.m_editor!.setPosition(cursorPosition);
+                this.m_editor!.revealPositionInCenter(cursorPosition);
                 break;
             case "SetSourceValue":
                 this.m_editor!.setValue(msg.value);
