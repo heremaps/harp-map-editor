@@ -30,9 +30,13 @@ class Decoder implements IGeometryProcessor {
     }
 
     private dump(type: string, layer: string, env: MapEnv) {
+        const level = (env.entries.$level as string) + " level";
+        const kind = env.entries.kind as string;
         geometryList[layer] = geometryList[layer] || {};
-        geometryList[layer][type] = geometryList[layer][type] || [];
-        geometryList[layer][type].push(env.entries);
+        geometryList[layer][type] = geometryList[layer][type] || {};
+        geometryList[layer][type][level] = geometryList[layer][type][level] || {};
+        geometryList[layer][type][level][kind] = geometryList[layer][type][level][kind] || [];
+        geometryList[layer][type][level][kind].push(env.entries);
     }
 }
 
