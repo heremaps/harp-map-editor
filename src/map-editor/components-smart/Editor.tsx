@@ -12,6 +12,8 @@ import TextEditor from "../TextEditor";
 import MapElem from "./MapElem";
 import Menu from "./Menu";
 
+const GAP = 40;
+
 interface DrugStartPosition {
     x: number;
     y: number;
@@ -192,14 +194,18 @@ export default class Editor extends Component<any, State> {
         switch (side) {
             case Side.Left:
             case Side.Right:
-                if (window.innerWidth - 40 < size) {
-                    size = window.innerWidth - 40;
+                if (window.innerWidth - GAP < size) {
+                    size = window.innerWidth - GAP;
+                } else if (size < GAP) {
+                    size = GAP;
                 }
                 break;
             case Side.Top:
             case Side.Bottom:
-                if (window.innerHeight - 40 < size) {
-                    size = window.innerHeight - 40;
+                if (window.innerHeight - GAP < size) {
+                    size = window.innerHeight - GAP;
+                } else if (size < GAP) {
+                    size = GAP;
                 }
                 break;
         }
