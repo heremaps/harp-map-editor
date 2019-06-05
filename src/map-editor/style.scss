@@ -307,6 +307,11 @@ body {
         top: 0;
         right: 0;
     }
+
+    #copyright {
+        bottom: auto;
+        top: 0;
+    }
 }
 
 #map-container.right {
@@ -319,6 +324,12 @@ body {
         top: 0;
         bottom: 0;
         left: 70px;
+    }
+
+    #copyright {
+        bottom: 0;
+        right: auto;
+        left: 0;
     }
 }
 
