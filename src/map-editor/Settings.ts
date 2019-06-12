@@ -96,7 +96,7 @@ type Setting = string | number | boolean | Side | null;
 /**
  * Manages settings and store data, allow to observe changes thru events.
  */
-class Settings<SType, StType> extends EventEmitter {
+class Settings<SType extends object, StType> extends EventEmitter {
     //Key where to save user settings in localStore.
     readonly m_settingsName = "editorSettings";
 
