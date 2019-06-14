@@ -142,9 +142,8 @@ export default class extends Component<Props, Stae> {
             }
             // @ts-ignore: Element implicitly has an 'any' type
             const currentLayerData = DATASOURCE_SCHEMA[techniqueData.layer as string] as LayerData;
-            const defaultValue = `$layer == '${techniqueData.layer}' && $geometryType == '${
-                techniqueData.geometryType
-            }'`;
+            // tslint:disable-next-line: max-line-length
+            const defaultValue = `$layer == '${techniqueData.layer}' && $geometryType == '${techniqueData.geometryType}'`;
 
             currentPage = (
                 <div>
