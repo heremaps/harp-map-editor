@@ -7,7 +7,8 @@ import * as React from "react";
 
 export interface Tab {
     name: string;
-    component: JSX.Element;
+    component: JSX.Element | null;
+    disabled?: boolean;
 }
 
 interface Props {
@@ -29,13 +30,19 @@ export default class extends React.Component<Props> {
             <section className="tabs" id={this.props.id}>
                 <ul>
                     {this.props.tabs.map((tab, i) => {
+                        let classes = tab === this.props.active ? "active" : "";
+                        classes += tab.disabled === true ? " disabled" : "";
+
                         return (
                             <li
                                 key={i}
                                 onClick={() => {
+                                    if (tab.disabled === true) {
+                                        return;
+                                    }
                                     this.props.onChange(tab);
                                 }}
-                                className={tab === this.props.active ? "active" : ""}
+                                className={classes}
                             >
                                 {tab.name}
                             </li>

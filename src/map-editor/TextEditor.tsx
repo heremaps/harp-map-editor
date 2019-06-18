@@ -63,7 +63,9 @@ class TextEditor {
                         command: "InitData",
                         value: this.m_value,
                         column: settings.get("textEditor:column"),
-                        line: settings.get("textEditor:line")
+                        line: settings.get("textEditor:line"),
+                        notificationsVisible: settings.get("notificationsVisible"),
+                        notificationsSize: settings.get("notificationsSize")
                     });
                     break;
                 case "UpdateSourceValue":
@@ -75,6 +77,15 @@ class TextEditor {
                 case "UpdateCursorPosition":
                     settings.set("textEditor:column", msg.column);
                     settings.set("textEditor:line", msg.line);
+                    break;
+                case "UpdateNotificationsCount":
+                    settings.setStoreData("notificationsState", {
+                        count: msg.count,
+                        severity: msg.severity
+                    });
+                    break;
+                case "UpdateNotificationsSize":
+                    settings.set("notificationsSize", msg.UpdateNotificationsSize);
                     break;
                 default:
                     logger.warn(`unhandled command: ${msg.command}`);
@@ -88,6 +99,14 @@ class TextEditor {
         window.onbeforeunload = () => {
             this.m_editorWindow!.close();
         };
+
+        settings.on("setting:notificationsVisible", notificationsVisible => {
+            this.sendMsg({
+                command: "ToggleNotifications",
+                notificationsVisible,
+                notificationsSize: settings.get("notificationsSize")
+            });
+        });
     }
 
     /**

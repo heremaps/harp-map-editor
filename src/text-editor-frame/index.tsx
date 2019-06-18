@@ -3,14 +3,9 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import "./style.scss";
-import TextEditor from "./TextEditor";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import "../style.scss";
+import App from "./components-smart/App";
 
-const editorElem = document.createElement("div");
-editorElem.id = "app";
-
-const textEditor = new TextEditor(editorElem);
-
-document.body.appendChild(editorElem);
-
-textEditor.resize();
+ReactDOM.render(<App />, document.getElementById("root"));

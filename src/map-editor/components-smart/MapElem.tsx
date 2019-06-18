@@ -5,29 +5,39 @@
  */
 import { MapControlsUI } from "@here/harp-map-controls";
 import * as React from "react";
-import { Side } from "../../types";
 import Component, { SettingsState } from "../Component";
 import MapHandler from "../map-handler";
 import Info from "./Info";
+import Menu from "./Menu";
+
+interface Props {
+    auto_resize: boolean;
+}
 
 /**
  * Responsible for managing DOM element of the map.
  */
-export default class extends Component<any, SettingsState> {
-    private m_elemMap: HTMLDivElement | null = null;
+export default class extends Component<Props, SettingsState> {
     private m_elemCopyright: HTMLDivElement | null = null;
     private m_controlsContainer: HTMLDivElement | null = null;
     private m_mapControlsUI: MapControlsUI | null = null;
 
     private onMapRemoved: () => void;
     private onMapCreated: () => void;
+    private onResize: () => void;
 
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
             settings: {},
             store: {}
+        };
+
+        this.onResize = () => {
+            if (this.props.auto_resize === true) {
+                MapHandler.resize();
+            }
         };
 
         this.onMapRemoved = () => {
@@ -59,6 +69,10 @@ export default class extends Component<any, SettingsState> {
                     elem.removeChild(canvas);
                 }
                 elem.appendChild(MapHandler.elem);
+
+                const copyrightElem = elem.querySelector("#copyright") as HTMLDivElement;
+                copyrightElem.remove();
+                elem.appendChild(MapHandler.copyrightElem as HTMLElement);
             }
 
             if (MapHandler.controls === null || MapHandler.mapView === null) {
@@ -73,72 +87,34 @@ export default class extends Component<any, SettingsState> {
     componentDidMount() {
         this.connectSettings(["editorTabVisible", "editorTabSize", "editorTabSide"]);
 
-        this.setPadding();
-
         MapHandler.on("mapCreated", this.onMapCreated);
         MapHandler.on("mapRemoved", this.onMapRemoved);
-
-        window.addEventListener("resize", () => {
-            this.setPadding();
-        });
+        window.addEventListener("resize", this.onResize);
 
         this.onMapCreated();
     }
 
-    render() {
-        this.setPadding();
+    componentDidUpdate() {
+        MapHandler.resize();
+    }
 
+    componentWillUnmount() {
+        super.componentWillUnmount();
+
+        MapHandler.removeListener("mapCreated", this.onMapCreated);
+        MapHandler.removeListener("mapRemoved", this.onMapRemoved);
+        window.removeEventListener("resize", this.onResize);
+    }
+
+    render() {
         return (
-            <div
-                id="map-container"
-                ref={node => (this.m_elemMap = node)}
-                className={this.state.settings.editorTabSide as string}
-            >
+            <div id="map-container" className={this.state.settings.editorTabSide as string}>
                 <div id="controls-container" ref={node => (this.m_controlsContainer = node)} />
                 <canvas className="map" />
                 <div id="copyright" ref={node => (this.m_elemCopyright = node)} />
                 <Info />
+                <Menu />
             </div>
         );
-    }
-
-    private setPadding() {
-        if (this.m_elemMap === null) {
-            return;
-        }
-
-        const { settings } = this.state;
-        const editorTabSize = settings.editorTabSize as number;
-        const editorTabVisible = settings.editorTabVisible as boolean;
-        const editorTabSide = settings.editorTabSide as Side;
-
-        this.m_elemMap.style.padding = "0";
-        this.m_controlsContainer!.style.margin = "0";
-        const react = this.m_elemMap.getBoundingClientRect();
-
-        if (editorTabVisible && editorTabSide !== Side.DeTouch) {
-            switch (editorTabSide) {
-                case Side.Left:
-                    this.m_elemMap.style.paddingLeft = `${editorTabSize}px`;
-                    MapHandler.resize(react.width - editorTabSize, react.height);
-                    break;
-                case Side.Right:
-                    this.m_elemMap.style.paddingRight = `${editorTabSize}px`;
-                    MapHandler.resize(react.width - editorTabSize, react.height);
-                    break;
-                case Side.Top:
-                    this.m_elemMap.style.paddingTop = `${editorTabSize}px`;
-                    this.m_controlsContainer!.style.marginTop = `${editorTabSize}px`;
-                    MapHandler.resize(react.width, react.height - editorTabSize);
-                    break;
-                case Side.Bottom:
-                    this.m_elemMap.style.paddingBottom = `${editorTabSize}px`;
-                    this.m_controlsContainer!.style.marginBottom = `${editorTabSize}px`;
-                    MapHandler.resize(react.width, react.height - editorTabSize);
-                    break;
-            }
-        } else {
-            MapHandler.resize(react.width, react.height);
-        }
     }
 }

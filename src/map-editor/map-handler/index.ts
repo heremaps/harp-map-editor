@@ -35,6 +35,9 @@ class MapHandler extends EventEmitter {
     get elem() {
         return this.m_canvasElem;
     }
+    get copyrightElem() {
+        return this.m_copyrightElem;
+    }
 
     get controls() {
         return this.m_controls;
@@ -240,11 +243,18 @@ class MapHandler extends EventEmitter {
         return intersectionResults[0].intersection!.object.userData;
     }
 
-    resize(width: number, height: number) {
-        if (this.m_mapView === null) {
+    resize() {
+        if (
+            this.m_mapView === null ||
+            this.m_canvasElem === null ||
+            this.m_canvasElem.parentElement === null
+        ) {
             return;
         }
-        this.m_mapView.resize(width, height);
+
+        const rect = this.m_canvasElem.parentElement.getBoundingClientRect();
+
+        this.m_mapView.resize(rect.width, rect.height);
     }
 
     whenFromKeyVal(data: WhenPropsData) {

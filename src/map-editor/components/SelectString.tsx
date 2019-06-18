@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import * as React from "react";
+import TextButton from "../../components/TextButton";
 
 interface Props<T extends string> {
     values: T[];
@@ -20,13 +21,12 @@ export default class SelectString<T extends string> extends React.Component<Prop
                 {values.map((val, i) => {
                     return (
                         <li key={i}>
-                            <a
-                                href="#"
+                            <TextButton
                                 onClick={() => this.props.onSelect(val)}
                                 className={val === active ? "active" : ""}
                             >
                                 {val}
-                            </a>
+                            </TextButton>
                         </li>
                     );
                 })}

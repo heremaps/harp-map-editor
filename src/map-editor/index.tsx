@@ -5,7 +5,7 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import "../style.scss";
 import App from "./components-smart/App";
-import "./style.scss";
 
 ReactDOM.render(<App />, document.getElementById("root"));
