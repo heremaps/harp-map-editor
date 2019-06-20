@@ -58,6 +58,14 @@ export interface AvailableSetting {
      * Secret access Key for HERE data sources.
      */
     accessKeySecret: string;
+    /**
+     * Toggle notifications visibility.
+     */
+    notificationsVisible: boolean;
+    /**
+     * Toggle notifications visibility.
+     */
+    notificationsSize: number;
 }
 
 /**
@@ -89,6 +97,13 @@ export interface AvailableData {
      * invalid [[JSON]].
      */
     parsedTheme: Theme | null;
+    /**
+     * Contains current set notifications for user.
+     */
+    notificationsState: {
+        count: number;
+        severity: number;
+    };
 }
 
 type Setting = string | number | boolean | Side | null;
@@ -180,7 +195,6 @@ class Settings<SType extends object, StType> extends EventEmitter {
         }
 
         this.m_store[key] = val;
-        this.save();
         this.emit(`store:${key}`, val);
         return val;
     }
@@ -258,11 +272,13 @@ const settings = new Settings<AvailableSetting, AvailableData>(
         editorMapViewState: new MapViewState().toString(),
         accessKeyId: "",
         accessKeySecret: "",
+        notificationsVisible: false,
+        notificationsSize: 800,
         "textEditor:column": 1,
         "textEditor:line": 1,
         "textEditor:sourceCode": JSON.stringify(theme as any, undefined, 4)
     },
-    { popups: [], styles: [] }
+    { popups: [], styles: [], notificationsState: { count: 0, severity: 0 } }
 );
 
 // Singleton settings manager

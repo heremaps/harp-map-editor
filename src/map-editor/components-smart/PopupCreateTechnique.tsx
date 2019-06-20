@@ -7,12 +7,13 @@ import { Style } from "@here/harp-datasource-protocol";
 import * as React from "react";
 import { GeometryType, TechniqueData, Techniques } from "../../types";
 import Component, { SettingsState } from "../Component";
+import ButtonIcon, { ICONS } from "../components/ButtonIcon";
 import SelectString from "../components/SelectString";
 import * as DATASOURCE_SCHEMA from "../datasourceSchemaModified.json";
 import MapHandler from "../map-handler";
 import PopupsContainer from "./PopupsContainer";
 
-interface Stae extends SettingsState {
+interface State extends SettingsState {
     techniqueData: TechniqueData;
 }
 
@@ -41,7 +42,7 @@ interface Props {
 /**
  * Responsible for ability to  change the theme style, and ability to load default themes.
  */
-export default class extends Component<Props, Stae> {
+export default class extends Component<Props, State> {
     private m_input: HTMLInputElement | null = null;
 
     constructor(props: Props) {
@@ -153,7 +154,7 @@ export default class extends Component<Props, Stae> {
                             return (
                                 <section key={i}>
                                     <h4>{section}</h4>
-                                    <ul>
+                                    <ul className="list">
                                         {Object.entries(props).map(([key, val], j) => {
                                             return (
                                                 <li key={j}>
@@ -175,12 +176,14 @@ export default class extends Component<Props, Stae> {
                         ref={elem => (this.m_input = elem)}
                         defaultValue={defaultValue}
                     />
-                    <button
+                    <ButtonIcon
+                        icon={ICONS.check}
+                        className="primary"
                         onClick={() => {
                             if (this.m_input === null || this.m_input.value.trim().length === 0) {
                                 PopupsContainer.alertPopup(
                                     "Warning!",
-                                    "When selector field should not be empty."
+                                    `Selector field "when" should not be empty.`
                                 );
                                 return;
                             }
@@ -188,9 +191,7 @@ export default class extends Component<Props, Stae> {
                             this.m_input.value = "";
                             this.setState({ techniqueData });
                         }}
-                    >
-                        OK
-                    </button>
+                    />
                 </div>
             );
         } else if (techniqueData.description === undefined) {
@@ -203,12 +204,14 @@ export default class extends Component<Props, Stae> {
                         ref={elem => (this.m_input = elem)}
                         defaultValue={techniqueData.description}
                     />
-                    <button
+                    <ButtonIcon
+                        icon={ICONS.check}
+                        className="primary"
                         onClick={() => {
                             if (this.m_input === null || this.m_input.value.trim().length === 0) {
                                 PopupsContainer.alertPopup(
                                     "Warning!",
-                                    "Description should not be empty."
+                                    "Please add some description."
                                 );
                                 return;
                             }
@@ -216,9 +219,7 @@ export default class extends Component<Props, Stae> {
                             this.m_input.value = "";
                             this.addStyle();
                         }}
-                    >
-                        OK
-                    </button>
+                    />
                 </div>
             );
         }
@@ -226,38 +227,3 @@ export default class extends Component<Props, Stae> {
         return <div id="create-technique">{currentPage}</div>;
     }
 }
-
-// interface DataSourceProperty {
-//     name: string;
-//     description?: string;
-//     optional?:boolean;
-//     value: string | number | boolean;
-// }
-
-// interface DataSourceEnum {
-//     name: string;
-//     description?: string;
-//     optional?:boolean;
-//     value: DataSourceEnumVariant[];
-// }
-
-// interface DataSourceEnumVariant {
-//     value: string | number;
-//     description?: string;
-// }
-
-// interface DataSourceGeometryType {
-//     type: string;
-//     properties: DataSourceProperty[] | DataSourceEnum[];
-// }
-
-// interface DataSourceLayer {
-//     name: string;
-//     optional?: boolean;
-//     description?: string;
-//     geometry_types: DataSourceGeometryType[];
-// }
-
-// interface DataSourceSchema {
-//     layers: DataSourceLayer[];
-// }

@@ -85,14 +85,16 @@ export default class PopupsContainer extends Component<any, SettingsState> {
                                 className={"window" + (exitButton ? " close-button" : "")}
                                 onClick={event => event.stopPropagation()}
                             >
-                                <header>{popup.name}</header>
-                                {exitButton ? (
-                                    <ButtonIcon
-                                        icon={ICONS.close}
-                                        title="Close"
-                                        onClick={event => this.closePopup(popup)}
-                                    />
-                                ) : null}
+                                <header>
+                                    {popup.name}
+                                    {exitButton ? (
+                                        <ButtonIcon
+                                            icon={ICONS.close}
+                                            title="Close"
+                                            onClick={event => this.closePopup(popup)}
+                                        />
+                                    ) : null}
+                                </header>
                                 <div className="content">{popup.component}</div>
                             </section>
                         </div>

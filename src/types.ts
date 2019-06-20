@@ -10,6 +10,13 @@ interface Command {
     command: string;
 }
 
+export interface Notification {
+    message: string;
+    severity: number;
+    startColumn: number;
+    startLineNumber: number;
+}
+
 export interface SetSourceValue extends Command {
     command: "SetSourceValue";
     value: string;
@@ -29,6 +36,7 @@ export interface UpdateSourceValue extends Command {
 export interface Format extends Command {
     command: "Format";
 }
+
 export interface ShowCommands extends Command {
     command: "ShowCommands";
 }
@@ -48,6 +56,8 @@ export interface InitData extends Command {
     line: number;
     column: number;
     value: string;
+    notificationsVisible: boolean;
+    notificationsSize: number;
 }
 
 export interface SetCursor extends Command {
@@ -62,6 +72,23 @@ export interface Undo extends Command {
 
 export interface Redo extends Command {
     command: "redo";
+}
+
+export interface ToggleNotifications extends Command {
+    command: "ToggleNotifications";
+    notificationsVisible: boolean;
+    notificationsSize: number;
+}
+
+export interface UpdateNotificationsCount extends Command {
+    command: "UpdateNotificationsCount";
+    count: number;
+    severity: number;
+}
+
+export interface UpdateNotificationsSize extends Command {
+    command: "UpdateNotificationsSize";
+    UpdateNotificationsSize: number;
 }
 
 /**
@@ -79,6 +106,9 @@ export type WindowCommands =
     | Undo
     | Redo
     | UpdateCursorPosition
+    | ToggleNotifications
+    | UpdateNotificationsSize
+    | UpdateNotificationsCount
     | SetCursor;
 
 /**
