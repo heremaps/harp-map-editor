@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import * as React from "react";
+import TextButton from "../../components/TextButton";
 import Component, { SettingsState } from "../Component";
 import Tabs, { Tab } from "../components/Tabs";
 import settings from "../Settings";
@@ -51,7 +52,13 @@ export default class extends Component<Props, Stae> {
             throw new Error();
         }
 
-        if (styles.length > 0) {
+        if (styles.length === 0) {
+            this.m_tabs.push({
+                name: "Switch style",
+                component: null,
+                disabled: true
+            });
+        } else {
             this.m_tabs.push({
                 name: "Switch style",
                 component: (
@@ -61,15 +68,14 @@ export default class extends Component<Props, Stae> {
                             {styles.map((style: string, i: number) => {
                                 return (
                                     <li key={i}>
-                                        <a
-                                            href="#"
+                                        <TextButton
                                             onClick={() => {
                                                 settings.set("editorCurrentStyle", style);
                                                 this.props.done();
                                             }}
                                         >
                                             {style}
-                                        </a>
+                                        </TextButton>
                                     </li>
                                 );
                             })}
@@ -88,15 +94,14 @@ export default class extends Component<Props, Stae> {
                         {DEFAULT_THEMES.map((item, i) => {
                             return (
                                 <li key={i}>
-                                    <a
-                                        href="#"
+                                    <TextButton
                                         onClick={() => {
                                             TextEditor.setValue(item.theme);
                                             this.props.done();
                                         }}
                                     >
                                         {item.name}
-                                    </a>
+                                    </TextButton>
                                 </li>
                             );
                         })}
@@ -106,7 +111,7 @@ export default class extends Component<Props, Stae> {
         });
 
         this.state = {
-            activeTab: this.m_tabs[0],
+            activeTab: this.m_tabs.filter(tab => !tab.disabled)[0],
             store: {},
             settings: {}
         };
