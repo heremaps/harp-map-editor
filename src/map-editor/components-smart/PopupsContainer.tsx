@@ -71,10 +71,12 @@ export default class PopupsContainer extends Component<any, SettingsState> {
                     const options = popup.options || {};
                     const exitButton =
                         options.exitGuard === undefined || options.exitGuard === "closeButton";
+
                     return (
                         <div
+                            id={popup.id}
                             key={i}
-                            className="popup"
+                            className={`popup ${popup.className || ""}`}
                             onClick={() => {
                                 if (options.exitGuard === undefined) {
                                     this.closePopup(popup);
@@ -85,14 +87,16 @@ export default class PopupsContainer extends Component<any, SettingsState> {
                                 className={"window" + (exitButton ? " close-button" : "")}
                                 onClick={event => event.stopPropagation()}
                             >
-                                <header>{popup.name}</header>
-                                {exitButton ? (
-                                    <ButtonIcon
-                                        icon={ICONS.close}
-                                        title="Close"
-                                        onClick={event => this.closePopup(popup)}
-                                    />
-                                ) : null}
+                                <header>
+                                    {popup.name}
+                                    {exitButton ? (
+                                        <ButtonIcon
+                                            icon={ICONS.close}
+                                            title="Close"
+                                            onClick={event => this.closePopup(popup)}
+                                        />
+                                    ) : null}
+                                </header>
                                 <div className="content">{popup.component}</div>
                             </section>
                         </div>

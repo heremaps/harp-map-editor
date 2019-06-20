@@ -12,6 +12,7 @@ import TextEditor from "../TextEditor";
 import PopupCreateTechnique from "./PopupCreateTechnique";
 import PopupGeometriesList from "./PopupGeometriesList";
 import PopupsContainer from "./PopupsContainer";
+import PopupSelectLink from "./PopupSelectLink";
 import PopupSelectTheme from "./PopupSelectTheme";
 
 enum MenuState {
@@ -23,6 +24,8 @@ enum MenuState {
 interface Props extends SettingsState {
     menuState: MenuState;
 }
+
+export type NotificationType = "secondary" | "warn" | "error";
 
 /**
  * Shows currently available actions for the user.
@@ -57,9 +60,10 @@ export default class Menu extends Component<{}, Props> {
             "editorTabSize",
             "editorTabVisible",
             "editorTabSide",
-            "editorInfoPick"
+            "editorInfoPick",
+            "notificationsVisible"
         ]);
-        this.connectStore(["styles", "parsedTheme"]);
+        this.connectStore(["styles", "parsedTheme", "notificationsState"]);
     }
 
     render() {
@@ -88,7 +92,7 @@ export default class Menu extends Component<{}, Props> {
             case MenuState.Idle:
                 buttons.unshift(
                     this.createGeometriesPopupButton(!themeIsValid),
-                    this.createThemePopupButton(!themeIsValid),
+                    this.createThemePopupButton(),
                     {
                         icon: ICONS.download,
                         title: "Download file",
@@ -121,14 +125,6 @@ export default class Menu extends Component<{}, Props> {
                         }
                     },
                     {
-                        icon: ICONS.picker,
-                        title: "Toggle info pick",
-                        active: settings.get("editorInfoPick"),
-                        onClick: () => {
-                            settings.set("editorInfoPick", !settings.get("editorInfoPick"));
-                        }
-                    },
-                    {
                         icon: ICONS.commands,
                         title: "Show quick command palette",
                         onClick: () => {
@@ -150,11 +146,33 @@ export default class Menu extends Component<{}, Props> {
                         }
                     },
                     {
+                        icon: ICONS.link,
+                        title: "Get link",
+                        onClick: () => {
+                            settings.getSettingsURL().then(link => {
+                                PopupsContainer.addPopup({
+                                    id: "share-link-popup",
+                                    name: "Link",
+                                    component: <PopupSelectLink link={link} />
+                                });
+                            });
+                        }
+                    },
+                    {
                         icon: ICONS.magicStick,
                         title: "Construct new style technique",
                         disabled: !themeIsValid,
                         onClick: () => Menu.openNewTechniquePopup()
-                    }
+                    },
+                    {
+                        icon: ICONS.picker,
+                        title: "Toggle info pick",
+                        active: settings.get("editorInfoPick"),
+                        onClick: () => {
+                            settings.set("editorInfoPick", !settings.get("editorInfoPick"));
+                        }
+                    },
+                    this.createNotificationsButton()
                 );
                 break;
 
@@ -189,6 +207,7 @@ export default class Menu extends Component<{}, Props> {
                             disabled={item.disabled}
                             active={item.active}
                             onClick={item.onClick}
+                            label={item.label}
                         />
                     );
                 })}
@@ -196,11 +215,10 @@ export default class Menu extends Component<{}, Props> {
         );
     }
 
-    private createThemePopupButton(disabled: boolean): ButtonIconProps {
+    private createThemePopupButton(): ButtonIconProps {
         return {
             icon: ICONS.colorPalette,
             title: "Switch styles / Load default theme",
-            disabled,
             onClick: () => {
                 const popup = {
                     name: "Switch styles",
@@ -226,6 +244,34 @@ export default class Menu extends Component<{}, Props> {
                     )
                 };
                 PopupsContainer.addPopup(popup);
+            }
+        };
+    }
+
+    private createNotificationsButton(): ButtonIconProps {
+        const notificationsState = settings.getStoreData("notificationsState");
+        const notificationsVisible = settings.get("notificationsVisible");
+
+        if (notificationsState === undefined) {
+            throw new Error();
+        }
+
+        let state: NotificationType = "secondary";
+
+        if (notificationsState.severity > 6) {
+            state = "error";
+        } else if (notificationsState.count > 0) {
+            state = "warn";
+        }
+
+        return {
+            icon: ICONS.alert,
+            title: "Notifications",
+            className: state,
+            label: notificationsState.count + "",
+            active: notificationsVisible,
+            onClick: () => {
+                settings.set("notificationsVisible", !notificationsVisible);
             }
         };
     }

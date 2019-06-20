@@ -35,6 +35,9 @@ class MapHandler extends EventEmitter {
     get elem() {
         return this.m_canvasElem;
     }
+    get copyrightElem() {
+        return this.m_copyrightElem;
+    }
 
     get controls() {
         return this.m_controls;
@@ -58,9 +61,7 @@ class MapHandler extends EventEmitter {
     /**
      * Represents the position and orientation of the camera.
      */
-    private m_mapViewState: MapViewState = MapViewState.fromString(
-        settings.get("editorMapViewState")
-    );
+    private m_mapViewState: MapViewState = new MapViewState();
     /**
      * The current data source for the camera.
      */
@@ -212,12 +213,12 @@ class MapHandler extends EventEmitter {
     init(canvas: HTMLCanvasElement, copyrightElem: HTMLDivElement) {
         this.m_canvasElem = canvas;
         this.m_copyrightElem = copyrightElem;
+        this.m_mapViewState = MapViewState.fromString(settings.get("editorMapViewState"));
 
         settings.on("setting:textEditor:sourceCode", this.rebuildMap);
         settings.on("setting:editorCurrentStyle", this.rebuildMap);
 
         this.rebuildMap();
-
         this.emit("init");
     }
 
@@ -240,11 +241,18 @@ class MapHandler extends EventEmitter {
         return intersectionResults[0].intersection!.object.userData;
     }
 
-    resize(width: number, height: number) {
-        if (this.m_mapView === null) {
+    resize() {
+        if (
+            this.m_mapView === null ||
+            this.m_canvasElem === null ||
+            this.m_canvasElem.parentElement === null
+        ) {
             return;
         }
-        this.m_mapView.resize(width, height);
+
+        const rect = this.m_canvasElem.parentElement.getBoundingClientRect();
+
+        this.m_mapView.resize(rect.width, rect.height);
     }
 
     whenFromKeyVal(data: WhenPropsData) {

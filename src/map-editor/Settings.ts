@@ -6,6 +6,7 @@
 import { Theme } from "@here/harp-datasource-protocol";
 import * as theme from "@here/harp-map-theme/resources/berlin_tilezen_base.json";
 import { EventEmitter } from "events";
+import * as jszip from "jszip";
 import { throttle } from "throttle-debounce";
 import { Popup, Side } from "../types";
 import MapViewState from "./map-handler/MapViewState";
@@ -58,6 +59,14 @@ export interface AvailableSetting {
      * Secret access Key for HERE data sources.
      */
     accessKeySecret: string;
+    /**
+     * Toggle notifications visibility.
+     */
+    notificationsVisible: boolean;
+    /**
+     * Toggle notifications visibility.
+     */
+    notificationsSize: number;
 }
 
 /**
@@ -89,6 +98,13 @@ export interface AvailableData {
      * invalid [[JSON]].
      */
     parsedTheme: Theme | null;
+    /**
+     * Contains current set notifications for user.
+     */
+    notificationsState: {
+        count: number;
+        severity: number;
+    };
 }
 
 type Setting = string | number | boolean | Side | null;
@@ -99,6 +115,7 @@ type Setting = string | number | boolean | Side | null;
 class Settings<SType extends object, StType> extends EventEmitter {
     //Key where to save user settings in localStore.
     readonly m_settingsName = "editorSettings";
+    readonly m_restoreUrlParamName = "settings";
 
     /**
      * Save user settings to localStore immediately.
@@ -128,10 +145,6 @@ class Settings<SType extends object, StType> extends EventEmitter {
         this.m_settings = settingsDefaults;
         this.m_store = initialStoreData;
 
-        this.load();
-
-        Object.entries(this.m_settings).forEach(([key, val]) => this.emit(key, val));
-
         this.saveForce = () => {
             if (!localStorage) {
                 return;
@@ -141,10 +154,22 @@ class Settings<SType extends object, StType> extends EventEmitter {
         };
 
         this.save = throttle(500, this.saveForce);
+    }
 
-        window.onbeforeunload = () => {
-            this.saveForce();
-        };
+    async init() {
+        if (window.location.search !== "") {
+            await this.loadFromSettingsURL();
+        } else {
+            this.load();
+        }
+
+        Object.entries(this.m_settings).forEach(([key, val]) => this.emit(key, val));
+
+        window.addEventListener("beforeunload", () => {
+            window.onbeforeunload = () => {
+                this.saveForce();
+            };
+        });
     }
 
     /**
@@ -180,7 +205,6 @@ class Settings<SType extends object, StType> extends EventEmitter {
         }
 
         this.m_store[key] = val;
-        this.save();
         this.emit(`store:${key}`, val);
         return val;
     }
@@ -224,14 +248,68 @@ class Settings<SType extends object, StType> extends EventEmitter {
     }
 
     /**
+     * Generate URL from current settings state.
+     */
+    getSettingsURL() {
+        const settingsCopy = JSON.stringify(this.m_settings);
+
+        const zip = new jszip();
+
+        zip.file("settings.json", settingsCopy);
+
+        return zip
+            .generateAsync({
+                type: "base64",
+                compression: "DEFLATE",
+                compressionOptions: { level: 9 }
+            })
+            .then(content => {
+                // tslint:disable-next-line: max-line-length
+                return `${window.location.origin}${window.location.pathname}?${this.m_restoreUrlParamName}=${content}`;
+            });
+    }
+
+    /**
+     * Load current settings state from [[window.location]].
+     */
+    async loadFromSettingsURL() {
+        const query: { [key: string]: string | undefined } = {};
+        window.location.search
+            .slice(1)
+            .split("&")
+            .reduce((result, item) => {
+                const index = item.indexOf("=");
+                result[item.slice(0, index)] = item.slice(index + 1);
+                return result;
+            }, query);
+
+        if (query[this.m_restoreUrlParamName] === undefined) {
+            return;
+        }
+
+        window.history.pushState({}, "", window.location.origin + window.location.pathname);
+        const zip = await jszip.loadAsync(query[this.m_restoreUrlParamName] as string, {
+            base64: true
+        });
+
+        if (!zip.files["settings.json"]) {
+            return;
+        }
+
+        const jsonData = await zip.files["settings.json"].async("text");
+
+        this.load(jsonData);
+    }
+
+    /**
      * Load and parse data from localStore
      */
-    private load() {
+    private load(strData: string | null = null) {
         if (!localStorage) {
             return;
         }
 
-        const data = localStorage.getItem(this.m_settingsName);
+        const data = strData || localStorage.getItem(this.m_settingsName);
         if (data === null) {
             return;
         }
@@ -258,11 +336,13 @@ const settings = new Settings<AvailableSetting, AvailableData>(
         editorMapViewState: new MapViewState().toString(),
         accessKeyId: "",
         accessKeySecret: "",
+        notificationsVisible: false,
+        notificationsSize: 800,
         "textEditor:column": 1,
         "textEditor:line": 1,
         "textEditor:sourceCode": JSON.stringify(theme as any, undefined, 4)
     },
-    { popups: [], styles: [] }
+    { popups: [], styles: [], notificationsState: { count: 0, severity: 0 } }
 );
 
 // Singleton settings manager

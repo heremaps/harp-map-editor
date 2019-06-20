@@ -8,6 +8,7 @@ import { LoggerManager } from "@here/harp-utils";
 import * as React from "react";
 import { Side, WindowCommands } from "../types";
 import PopupsContainer from "./components-smart/PopupsContainer";
+import MapHighlighter from "./map-handler/MapHighliter";
 import settings from "./Settings";
 
 export const logger = LoggerManager.instance.create("TextEditor");
@@ -48,8 +49,6 @@ class TextEditor {
 
         this.elemEditor.id = "editor-container";
 
-        this.createIframe();
-
         this.onMessage = (data: MessageEvent) => {
             if (!data.isTrusted || data.origin !== window.location.origin) {
                 return;
@@ -63,8 +62,13 @@ class TextEditor {
                         command: "InitData",
                         value: this.m_value,
                         column: settings.get("textEditor:column"),
-                        line: settings.get("textEditor:line")
+                        line: settings.get("textEditor:line"),
+                        notificationsVisible: settings.get("notificationsVisible"),
+                        notificationsSize: settings.get("notificationsSize")
                     });
+                    break;
+                case "HighlightFeature":
+                    MapHighlighter.highlight(msg.condition);
                     break;
                 case "UpdateSourceValue":
                     this.updateSource(msg.value);
@@ -76,18 +80,39 @@ class TextEditor {
                     settings.set("textEditor:column", msg.column);
                     settings.set("textEditor:line", msg.line);
                     break;
+                case "UpdateNotificationsCount":
+                    settings.setStoreData("notificationsState", {
+                        count: msg.count,
+                        severity: msg.severity
+                    });
+                    break;
+                case "UpdateNotificationsSize":
+                    settings.set("notificationsSize", msg.UpdateNotificationsSize);
+                    break;
                 default:
                     logger.warn(`unhandled command: ${msg.command}`);
             }
         };
+    }
 
-        window.addEventListener("message", this.onMessage);
-
+    async init() {
+        this.createIframe();
         this.updateSource(settings.get("textEditor:sourceCode"));
 
-        window.onbeforeunload = () => {
-            this.m_editorWindow!.close();
-        };
+        window.addEventListener("message", this.onMessage);
+        window.addEventListener("beforeunload", () => {
+            if (this.m_editorWindow !== null) {
+                this.m_editorWindow.close();
+            }
+        });
+
+        settings.on("setting:notificationsVisible", notificationsVisible => {
+            this.sendMsg({
+                command: "ToggleNotifications",
+                notificationsVisible,
+                notificationsSize: settings.get("notificationsSize")
+            });
+        });
     }
 
     /**

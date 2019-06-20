@@ -4,10 +4,22 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import * as React from "react";
-import { FiBox, FiCheckSquare, FiCopy, FiSidebar, FiSquare, FiTerminal, FiX } from "react-icons/fi";
+import {
+    FiAlertTriangle,
+    FiBox,
+    FiCheck,
+    FiCheckSquare,
+    FiCopy,
+    FiLink,
+    FiSidebar,
+    FiSquare,
+    FiTerminal,
+    FiX
+} from "react-icons/fi";
 import {
     IoIosColorPalette,
     IoIosColorWand,
+    IoIosCopy,
     IoIosFolderOpen,
     IoIosRedo,
     IoIosUndo,
@@ -18,27 +30,31 @@ import {
 } from "react-icons/io";
 import { Side } from "../../types";
 
-export const ICONS: { [key: string]: React.ComponentFactory<any, any> } = {
-    eye: IoMdEye,
-    [Side.Bottom as string]: FiSidebar,
-    [Side.Left as string]: FiSidebar,
-    [Side.Right as string]: FiSidebar,
-    [Side.Top as string]: FiSidebar,
-    [Side.DeTouch as string]: FiCopy,
-    download: IoMdDownload,
-    open: IoIosFolderOpen,
-    format: IoMdCode,
-    picker: IoMdColorFilter,
-    commands: FiTerminal,
-    checkOn: FiCheckSquare,
-    checkOff: FiSquare,
-    colorPalette: IoIosColorPalette,
-    close: FiX,
-    undo: IoIosUndo,
-    redo: IoIosRedo,
-    geometries: FiBox,
-    magicStick: IoIosColorWand
-};
+export class ICONS {
+    static readonly eye = IoMdEye;
+    static readonly [Side.Bottom] = FiSidebar;
+    static readonly [Side.Left] = FiSidebar;
+    static readonly [Side.Right] = FiSidebar;
+    static readonly [Side.Top] = FiSidebar;
+    static readonly [Side.DeTouch] = FiCopy;
+    static readonly copy = IoIosCopy;
+    static readonly download = IoMdDownload;
+    static readonly open = IoIosFolderOpen;
+    static readonly format = IoMdCode;
+    static readonly picker = IoMdColorFilter;
+    static readonly commands = FiTerminal;
+    static readonly check = FiCheck;
+    static readonly checkOn = FiCheckSquare;
+    static readonly checkOff = FiSquare;
+    static readonly colorPalette = IoIosColorPalette;
+    static readonly close = FiX;
+    static readonly undo = IoIosUndo;
+    static readonly redo = IoIosRedo;
+    static readonly geometries = FiBox;
+    static readonly magicStick = IoIosColorWand;
+    static readonly alert = FiAlertTriangle;
+    static readonly link = FiLink;
+}
 
 export type EventCallBack = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 
@@ -46,16 +62,17 @@ export interface ButtonIconProps {
     icon: React.ComponentFactory<any, any>;
     active?: boolean;
     onClick?: EventCallBack;
+    disabled?: boolean;
+    label?: string;
     title?: string;
     className?: string;
-    disabled?: boolean;
 }
 
-export default class extends React.Component<ButtonIconProps> {
+export default class ButtonIcon extends React.Component<ButtonIconProps> {
     render() {
-        const { onClick, title, disabled, active } = this.props;
+        const { onClick, title, disabled, active, label } = this.props;
         const Icon = this.props.icon;
-        let className = "button-icon";
+        let className = "button-icon no-select";
 
         if (!Icon) {
             throw new Error();
@@ -74,6 +91,7 @@ export default class extends React.Component<ButtonIconProps> {
         return (
             <div className={className} onClick={disabled ? undefined : onClick} title={title}>
                 <Icon />
+                {label !== undefined ? <span>{label}</span> : null}
             </div>
         );
     }

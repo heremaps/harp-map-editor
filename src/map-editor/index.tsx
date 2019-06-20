@@ -5,7 +5,14 @@
  */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import "../style.scss";
 import App from "./components-smart/App";
-import "./style.scss";
+import settings from "./Settings";
+import textEditor from "./TextEditor";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+settings
+    .init()
+    .then(() => textEditor.init())
+    .then(() => {
+        ReactDOM.render(<App />, document.getElementById("root"));
+    });
