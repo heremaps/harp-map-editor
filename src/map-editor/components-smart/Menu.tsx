@@ -12,6 +12,7 @@ import TextEditor from "../TextEditor";
 import PopupCreateTechnique from "./PopupCreateTechnique";
 import PopupGeometriesList from "./PopupGeometriesList";
 import PopupsContainer from "./PopupsContainer";
+import PopupSelectLink from "./PopupSelectLink";
 import PopupSelectTheme from "./PopupSelectTheme";
 
 enum MenuState {
@@ -142,6 +143,19 @@ export default class Menu extends Component<{}, Props> {
                         title: "Redo",
                         onClick: () => {
                             TextEditor.redo();
+                        }
+                    },
+                    {
+                        icon: ICONS.link,
+                        title: "Get link",
+                        onClick: () => {
+                            settings.getSettingsURL().then(link => {
+                                PopupsContainer.addPopup({
+                                    id: "share-link-popup",
+                                    name: "Link",
+                                    component: <PopupSelectLink link={link} />
+                                });
+                            });
                         }
                     },
                     {
