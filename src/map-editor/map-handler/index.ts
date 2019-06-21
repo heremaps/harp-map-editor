@@ -61,9 +61,7 @@ class MapHandler extends EventEmitter {
     /**
      * Represents the position and orientation of the camera.
      */
-    private m_mapViewState: MapViewState = MapViewState.fromString(
-        settings.get("editorMapViewState")
-    );
+    private m_mapViewState: MapViewState = new MapViewState();
     /**
      * The current data source for the camera.
      */
@@ -215,6 +213,7 @@ class MapHandler extends EventEmitter {
     init(canvas: HTMLCanvasElement, copyrightElem: HTMLDivElement) {
         this.m_canvasElem = canvas;
         this.m_copyrightElem = copyrightElem;
+        this.m_mapViewState = MapViewState.fromString(settings.get("editorMapViewState"));
 
         settings.on("setting:textEditor:sourceCode", this.rebuildMap);
         settings.on("setting:editorCurrentStyle", this.rebuildMap);

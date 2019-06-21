@@ -48,8 +48,6 @@ class TextEditor {
 
         this.elemEditor.id = "editor-container";
 
-        this.createIframe();
-
         this.onMessage = (data: MessageEvent) => {
             if (!data.isTrusted || data.origin !== window.location.origin) {
                 return;
@@ -91,14 +89,18 @@ class TextEditor {
                     logger.warn(`unhandled command: ${msg.command}`);
             }
         };
+    }
 
-        window.addEventListener("message", this.onMessage);
-
+    async init() {
+        this.createIframe();
         this.updateSource(settings.get("textEditor:sourceCode"));
 
-        window.onbeforeunload = () => {
-            this.m_editorWindow!.close();
-        };
+        window.addEventListener("message", this.onMessage);
+        window.addEventListener("beforeunload", () => {
+            if (this.m_editorWindow !== null) {
+                this.m_editorWindow.close();
+            }
+        });
 
         settings.on("setting:notificationsVisible", notificationsVisible => {
             this.sendMsg({
