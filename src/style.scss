@@ -91,6 +91,12 @@ body {
         width: 100%;
     }
 
+    .popup-textarea {
+        @extend .popup-input;
+        height: $step * 6;
+        height: $step * 8;
+    }
+
 }
 
 
@@ -199,7 +205,7 @@ body {
         bottom: 0;
         right: 0;
         opacity: 0.5;
-        padding: 2px;
+        padding: 2px 6px;
     }
 
     #copyright:hover {
@@ -339,7 +345,6 @@ body {
     padding: $step * 0.25 * 0.5;
     background-color: $bg-color;
     display: block;
-    transition: color 0.2s ease-in-out;
     position: relative;
 
     span {
@@ -398,6 +403,9 @@ body {
     }
 }
 
+.button-icon:active {
+    color: $icon-active;
+}
 
 
 .button-icon.disabled {
@@ -616,9 +624,32 @@ h3 {
         display: block;
         // height: $notifier-height - ($separator-size * 2);
 
-        li.error{
+        li.error {
             color: $color-error;
         }
     }
 }
 
+#popup-copy-link {
+    .popup-input {
+        width: calc(100% - (#{$step + $separator-size}));
+        margin-top: 0;
+        height: $step;
+    }
+
+    .button-icon {
+        display: inline-block;
+        vertical-align: sub;
+        float: right;
+    }
+
+    clear: both;
+}
+
+#share-link-popup {
+    .window {
+        .content {
+            min-height: auto;
+        }
+    }
+}
