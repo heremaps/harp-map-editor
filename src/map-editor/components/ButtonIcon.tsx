@@ -10,6 +10,7 @@ import {
     FiCheck,
     FiCheckSquare,
     FiCopy,
+    FiLink,
     FiSidebar,
     FiSquare,
     FiTerminal,
@@ -18,6 +19,7 @@ import {
 import {
     IoIosColorPalette,
     IoIosColorWand,
+    IoIosCopy,
     IoIosFolderOpen,
     IoIosRedo,
     IoIosUndo,
@@ -35,6 +37,7 @@ export class ICONS {
     static readonly [Side.Right] = FiSidebar;
     static readonly [Side.Top] = FiSidebar;
     static readonly [Side.DeTouch] = FiCopy;
+    static readonly copy = IoIosCopy;
     static readonly download = IoMdDownload;
     static readonly open = IoIosFolderOpen;
     static readonly format = IoMdCode;
@@ -50,6 +53,7 @@ export class ICONS {
     static readonly geometries = FiBox;
     static readonly magicStick = IoIosColorWand;
     static readonly alert = FiAlertTriangle;
+    static readonly link = FiLink;
 }
 
 export type EventCallBack = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;

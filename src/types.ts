@@ -128,6 +128,8 @@ export enum Side {
 export interface Popup {
     component: JSX.Element;
     name: string;
+    className?: string;
+    id?: string;
     options?: {
         exitGuard?: "doNotExt" | "closeButton";
     };

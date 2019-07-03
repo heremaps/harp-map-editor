@@ -71,10 +71,12 @@ export default class PopupsContainer extends Component<any, SettingsState> {
                     const options = popup.options || {};
                     const exitButton =
                         options.exitGuard === undefined || options.exitGuard === "closeButton";
+
                     return (
                         <div
+                            id={popup.id}
                             key={i}
-                            className="popup"
+                            className={`popup ${popup.className || ""}`}
                             onClick={() => {
                                 if (options.exitGuard === undefined) {
                                     this.closePopup(popup);
