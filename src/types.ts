@@ -91,11 +91,17 @@ export interface UpdateNotificationsSize extends Command {
     UpdateNotificationsSize: number;
 }
 
+export interface HighlightFeature extends Command {
+    command: "HighlightFeature";
+    condition: string;
+}
+
 /**
  * Type that collect all available messages. This messages used for connect the text editor with the
  * map style editor
  */
 export type WindowCommands =
+    | HighlightFeature
     | SetSourceValue
     | GetSourceValue
     | Format
@@ -162,5 +168,6 @@ export interface WhenPropsData {
     min_zoom?: number;
     kind?: string;
     kind_detail?: string;
+
     network?: string;
 }
