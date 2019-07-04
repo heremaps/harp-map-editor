@@ -8,6 +8,7 @@ import { LoggerManager } from "@here/harp-utils";
 import * as React from "react";
 import { Side, WindowCommands } from "../types";
 import PopupsContainer from "./components-smart/PopupsContainer";
+import MapHighlighter from "./map-handler/MapHighliter";
 import settings from "./Settings";
 
 export const logger = LoggerManager.instance.create("TextEditor");
@@ -65,6 +66,9 @@ class TextEditor {
                         notificationsVisible: settings.get("notificationsVisible"),
                         notificationsSize: settings.get("notificationsSize")
                     });
+                    break;
+                case "HighlightFeature":
+                    MapHighlighter.highlight(msg.condition);
                     break;
                 case "UpdateSourceValue":
                     this.updateSource(msg.value);

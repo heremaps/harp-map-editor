@@ -20,6 +20,7 @@ export class TextEditor extends EventEmitter {
     /**
      * The macro editor instance
      */
+    private m_decorations: string[] = [];
     private m_editor: monaco.editor.IStandaloneCodeEditor | null = null;
     private m_monacoNotifications: Notification[] = [];
     private m_editorElem: HTMLElement | null = null;
@@ -56,6 +57,45 @@ export class TextEditor extends EventEmitter {
                 return;
             }
             this.onMessage(data.data);
+        });
+
+        monaco.languages.registerHoverProvider("json", {
+            provideHover: (model, position) => {
+                const text = model.getLineContent(position.lineNumber);
+
+                if (!text.includes('"when"')) {
+                    this.sendMsg({ command: "HighlightFeature", condition: "" });
+                    this.m_decorations = model.deltaDecorations(this.m_decorations, []);
+                    return;
+                }
+
+                try {
+                    if (text.indexOf('"when"') !== -1) {
+                        this.m_decorations = model.deltaDecorations(this.m_decorations, [
+                            {
+                                range: new monaco.Range(
+                                    position.lineNumber,
+                                    0,
+                                    position.lineNumber,
+                                    text.length
+                                ),
+                                options: {
+                                    isWholeLine: true,
+                                    inlineClassName: "highlightedLine"
+                                }
+                            }
+                        ]);
+                        const lineText = text
+                            .split(":")[1]
+                            .trim()
+                            .replace(/"/g, "");
+                        this.sendMsg({ command: "HighlightFeature", condition: lineText });
+                    }
+                } catch (err) {
+                    // nothing here
+                }
+                return null;
+            }
         });
 
         // Inform the Theme editor that the text editor is ready. The Theme editor then will send a
