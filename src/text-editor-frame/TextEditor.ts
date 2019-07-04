@@ -64,7 +64,7 @@ export class TextEditor extends EventEmitter {
                 const text = model.getLineContent(position.lineNumber);
 
                 if (!text.includes('"when"')) {
-                    this.sendMsg({ command: "HighlightFeature", condition: '' });
+                    this.sendMsg({ command: "HighlightFeature", condition: "" });
                     this.m_decorations = model.deltaDecorations(this.m_decorations, []);
                     return;
                 }

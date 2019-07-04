@@ -11,7 +11,6 @@ import { accessToken } from "../config";
 import MapHandler from "./index";
 
 class MapHighlighter {
-
     private m_mapView: MapView | null = null;
     private m_activeWhereParam = "";
     private m_highlightDataSource: OmvDataSource;
@@ -47,7 +46,7 @@ class MapHighlighter {
         ]
     };
 
-    constructor () {
+    constructor() {
         this.m_highlightDataSource = new OmvDataSource({
             name: "decorations",
             baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
@@ -78,8 +77,7 @@ class MapHighlighter {
                 this.m_mapView!.update();
             }, 1000);
         }
-    }
-
+    };
 }
 
 export default new MapHighlighter();
