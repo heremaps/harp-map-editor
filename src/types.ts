@@ -168,5 +168,6 @@ export interface WhenPropsData {
     min_zoom?: number;
     kind?: string;
     kind_detail?: string;
+  
     network?: string;
 }
