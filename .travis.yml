@@ -20,27 +20,32 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 
 jobs:
-  - name: Test
-    script: |
-      set -ex
-      yarn run test
-      yarn run tslint
-      yarn run prettier
-      yarn run typedoc
-      yarn run build
-deploy:
-  - provider: script
-    script: ./scripts/publish-packages.sh
-    skip_cleanup: true
-    on:
-      tags: true
-      branch: master
-  - provider: pages
-    skip_cleanup: true
-    commiter-from-gh: true
-    keep-history: false
-    local-dir: dist
-    github-token: $GITHUB_TOKEN
-    on:
-      branch: master
-      tags: true
+  include:
+    - name: "Test"
+      script: | 
+        set -ex
+        yarn run test
+        yarn run tslint
+        yarn run prettier
+    - name: "Build & Deploy"
+      script: |
+        set -ex
+        yarn run typedoc
+        yarn run build
+      deploy:
+        - provider: script
+          script: ./scripts/publish-packages.sh
+          skip_cleanup: true
+          on:
+            tags: true
+            branch: master
+        - provider: pages
+          skip_cleanup: true
+          commiter-from-gh: true
+          keep-history: false
+          local-dir: dist
+          github-token: $GITHUB_TOKEN
+          on:
+            tags: true
+            branch: master
+
