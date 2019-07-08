@@ -20,9 +20,10 @@ before_install:
   - export PATH="$HOME/.yarn/bin:$PATH"
 
 jobs:
-  - name: "Test"
+  - name: Test
     script: |
       set -ex
+      yarn run test
       yarn run tslint
       yarn run prettier
       yarn run typedoc
