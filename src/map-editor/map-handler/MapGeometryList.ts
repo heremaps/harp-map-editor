@@ -10,6 +10,7 @@ import {
     ILineGeometry,
     IPolygonGeometry
 } from "@here/harp-omv-datasource/lib/IGeometryProcessor";
+import { Vector2 } from "three";
 
 //
 
@@ -17,16 +18,34 @@ let dataProvider: DataProvider;
 export let geometryList: any = {};
 
 class Decoder implements IGeometryProcessor {
-    processLineFeature(layer: string, geometry: ILineGeometry[], env: MapEnv): void {
-        this.dump("line", layer, env);
+    processLineFeature(
+        layerName: string,
+        layerExtents: number,
+        geometry: ILineGeometry[],
+        env: MapEnv,
+        storageLevel: number
+    ) {
+        this.dump("line", layerName, env);
     }
 
-    processPointFeature(layer: string, geometry: GeoCoordinates[], env: MapEnv): void {
-        this.dump("point", layer, env);
+    processPointFeature(
+        layerName: string,
+        layerExtents: number,
+        geometry: Vector2[],
+        env: MapEnv,
+        storageLevel: number
+    ) {
+        this.dump("point", layerName, env);
     }
 
-    processPolygonFeature(layer: string, polygons: IPolygonGeometry[], env: MapEnv): void {
-        this.dump("polygon", layer, env);
+    processPolygonFeature(
+        layerName: string,
+        layerExtents: number,
+        geometry: IPolygonGeometry[],
+        env: MapEnv,
+        storageLevel: number
+    ) {
+        this.dump("polygon", layerName, env);
     }
 
     private dump(type: string, layer: string, env: MapEnv) {
@@ -54,12 +73,11 @@ async function dumpTile(geoPoint: GeoCoordinates, level: number) {
     }
 
     geometryList = {};
-    const geoBox = webMercatorTilingScheme.getGeoBox(tileKey);
     const buffer = (await dataProvider.getTile(tileKey)) as ArrayBuffer;
     const decoder = new Decoder();
     const adapter = new OmvProtobufDataAdapter(decoder);
 
-    adapter.process(buffer, tileKey, geoBox);
+    adapter.process(buffer, tileKey);
 }
 
 export const getGeometryData = (mapView: MapView, dataSource: OmvDataSource): void => {

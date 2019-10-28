@@ -3,7 +3,7 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Style, Theme } from "@here/harp-datasource-protocol";
+import { BaseStyle, ResolvedStyleDeclaration, Theme } from "@here/harp-datasource-protocol";
 import { MapControls } from "@here/harp-map-controls";
 import {
     CopyrightElementHandler,
@@ -270,7 +270,7 @@ class MapHandler extends EventEmitter {
             .join(" && ");
     }
 
-    addStyleTechnique(style: Style): AddStyleTechniqueResult {
+    addStyleTechnique(style: ResolvedStyleDeclaration): AddStyleTechniqueResult {
         const theme = textEditor.getParsedTheme();
         const currentStyle = settings.get("editorCurrentStyle");
 
@@ -283,15 +283,17 @@ class MapHandler extends EventEmitter {
             return "err";
         }
 
-        const descriptionIsExist = theme.styles[currentStyle].some(
-            item => item.description === style.description
+        const currentStyleSet = theme.styles[currentStyle];
+
+        const descriptionIsExist = currentStyleSet.some(
+            item => (item as BaseStyle).description === style.description
         );
 
         if (descriptionIsExist) {
             return "exists";
         }
 
-        theme.styles[currentStyle].push(style);
+        currentStyleSet.push(style);
 
         const source = JSON.stringify(theme, undefined, 4);
         textEditor.setValue(source);
