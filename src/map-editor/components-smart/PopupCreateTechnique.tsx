@@ -3,7 +3,8 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { Style } from "@here/harp-datasource-protocol";
+import { ResolvedStyleDeclaration } from "@here/harp-datasource-protocol";
+import { Expr } from "@here/harp-datasource-protocol/lib/Expr";
 import * as React from "react";
 import { GeometryType, TechniqueData, Techniques } from "../../types";
 import Component, { SettingsState } from "../Component";
@@ -64,14 +65,22 @@ export default class extends Component<Props, State> {
             throw new Error();
         }
 
+        if (techniqueData.when === undefined) {
+            PopupsContainer.alertPopup("Error", "Style is missing mandatory when condition.");
+            return;
+        }
+
         const style = {
             technique: techniqueData.technique,
-            when: techniqueData.when,
+            when:
+                typeof techniqueData.when === "string"
+                    ? Expr.parse(techniqueData.when).toJSON()
+                    : techniqueData.when,
             description: techniqueData.description,
             attr: {}
         };
 
-        switch (MapHandler.addStyleTechnique(style as Style)) {
+        switch (MapHandler.addStyleTechnique(style as ResolvedStyleDeclaration)) {
             case "err":
                 PopupsContainer.alertPopup("Error", "Can't create style.");
                 break;

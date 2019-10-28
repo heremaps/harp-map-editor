@@ -55,7 +55,6 @@ class MapHighlighter {
             authenticationCode: accessToken,
             decoder: new OmvTileDecoder()
         });
-        this.m_highlightDataSource.addTileBackground = false;
     }
 
     highlight = async (newWhenCondition: string) => {
