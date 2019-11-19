@@ -13,7 +13,7 @@ const commonConfig = {
         filename: `[name].bundle${bundleSuffix}.js`
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js"]
+        extensions: [".webpack.js", ".web.ts", ".ts", ".tsx", ".web.js", ".js"]
     },
     devtool: isProduction ? "source-map" : "inline-source-map",
     module: {
