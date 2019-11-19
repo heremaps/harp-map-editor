@@ -9,7 +9,8 @@ import {
     CopyrightElementHandler,
     CopyrightInfo,
     MapView,
-    MapViewEventNames
+    MapViewEventNames,
+    MapViewUtils
 } from "@here/harp-mapview";
 import { APIFormat, OmvDataSource } from "@here/harp-omv-datasource";
 import { OmvTileDecoder } from "@here/harp-omv-datasource/lib/OmvDecoder";
@@ -103,11 +104,13 @@ class MapHandler extends EventEmitter {
             if (this.m_mapView === null || this.m_controls === null) {
                 return;
             }
+            const targetWorld = MapViewUtils.rayCastWorldCoordinates(this.m_mapView, 0, 0);
+            const target = this.m_mapView.projection.unprojectPoint(targetWorld!);
             const state = new MapViewState(
-                this.m_mapView.zoomLevel,
-                this.m_mapView.geoCenter,
-                this.m_controls.yawPitchRoll.yaw,
-                this.m_controls.yawPitchRoll.pitch
+                this.m_mapView.lookAtDistance,
+                target,
+                -this.m_controls.attitude.yaw,
+                this.m_controls.attitude.pitch
             );
             this.m_mapViewState = state;
             this.emitStateUpdate();
@@ -165,11 +168,11 @@ class MapHandler extends EventEmitter {
             this.m_controls = new MapControls(this.m_mapView);
             this.m_controls.enabled = true;
 
-            this.m_controls.setRotation(this.m_mapViewState.yaw, this.m_mapViewState.pitch);
-
-            this.m_mapView.setCameraGeolocationAndZoom(
-                this.m_mapViewState.center,
-                this.m_mapViewState.zoom
+            this.m_mapView.lookAt(
+                this.m_mapViewState.target,
+                this.m_mapViewState.distance,
+                this.m_mapViewState.tilt,
+                this.m_mapViewState.azimuth
             );
 
             this.m_datasource = new OmvDataSource({
