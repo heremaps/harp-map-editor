@@ -18,19 +18,19 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@here/harp-datasource-protocol@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-datasource-protocol/-/harp-datasource-protocol-0.11.0.tgz#c2c6a4f2a2515c2f69d42dd1cdfc1118d330859e"
-  integrity sha512-7VkoRBamx+hLrPrfT4/E2BljPkH3MrVtCx+eRyqqCWOQEVxMktCZxbyUL2h8oRHRNiMk2FWghKgPrbThjtZJ/w==
+"@here/harp-datasource-protocol@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-datasource-protocol/-/harp-datasource-protocol-0.12.0.tgz#2b84ab6af9ece7ef0a18b10d24cfa48c09e87532"
+  integrity sha512-MmAcel9ZKkwk/RQqItE+u6NnWqk7GqJGJtRwn4w8LurA7di2ifFxYUrnejPuFuSjVcxnCjliD7u+OlcBlhtS0Q==
   dependencies:
-    "@here/harp-geometry" "^0.11.0"
-    "@here/harp-geoutils" "^0.11.0"
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-geometry" "^0.12.0"
+    "@here/harp-geoutils" "^0.12.0"
+    "@here/harp-utils" "^0.12.0"
 
-"@here/harp-fetch@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-fetch/-/harp-fetch-0.11.0.tgz#8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
-  integrity sha512-Yp+3VQdDR9r66MRJ4zSSu6XemnkAz9ahz2e+RRWhdoM4OHih8zvmVbSH1H4WDCW0qkZM2W8z8c66jKPCJoHAPw==
+"@here/harp-fetch@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-fetch/-/harp-fetch-0.12.0.tgz#5b948cbbd5a8ffdff0efe47bf7adb12e2d6592b9"
+  integrity sha512-M4aFugfupQomlDr08I2mW9N/70M9633AHjXGJIoUQWA0MmnH6rdIB/Qj3TP49ojqhpihz7GyGsNHpqb2VhofLg==
   dependencies:
     node-fetch "^2.2.0"
 
@@ -39,123 +39,124 @@
   resolved "https://registry.yarnpkg.com/@here/harp-font-resources/-/harp-font-resources-0.2.4.tgz#266bff0187a45317ae92a5ba82083e324c26fa1b"
   integrity sha512-/DVU+1Mo8dW6NPyucJKuBVQ3NFIR0HPt6Oio1gtMaxQh3t3zIH7kXJMKOyjzcQrrENZar99pbyZKnemgIwNgWg==
 
-"@here/harp-geometry@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-geometry/-/harp-geometry-0.11.0.tgz#38e7bf0d199347d065fb9f7f06242d660391264d"
-  integrity sha512-hgTtEl5PHeVNjIoks1nww70z3wEK819EZUF4P/fQJq5/fFINA8MxHqA5+BKAEcLFPSOLpu/v22zXvZwXHMLCLQ==
+"@here/harp-geometry@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-geometry/-/harp-geometry-0.12.0.tgz#4f0f2203963c012945550830bbd77052e8a780aa"
+  integrity sha512-2O7Pzr/jQf2qCIQFfl87Fx2Oz3oPx1n0dkPNa0DmjsWwG83+sNwX+PuJWNTzXTEai9/ZZpgpNDop/QVFtu/BYA==
   dependencies:
-    "@here/harp-geoutils" "^0.11.0"
+    "@here/harp-geoutils" "^0.12.0"
 
-"@here/harp-geoutils@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-geoutils/-/harp-geoutils-0.11.0.tgz#7a84f7800dacbbc4ef7389a9015b26b2c75080c9"
-  integrity sha512-x4UhDrP8Y+Cpd7TSzRDk6f+aY01FZWdPOu3KRvSn1v9R2aXWT1y/nAaGpJ41NY3PijruxDRjue1D6C7b7u5m3g==
+"@here/harp-geoutils@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-geoutils/-/harp-geoutils-0.12.0.tgz#7a58b05738a54e8a51d63aab48bcb93e4b5cbbbb"
+  integrity sha512-mYx1HqBv/DJlda5HQhQXcw8OvPBxspg7a86Ci194+TvQrbL1EF2Btegj4JnnTyx+5wjTo44I1DshbP4sac354Q==
 
-"@here/harp-lines@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-lines/-/harp-lines-0.11.0.tgz#b4aecc6f93005b3de085b741dc467fc3cd739d6f"
-  integrity sha512-gL2Lywxx+QjNP51EtOka4S+OyRMX9StD1MEH59t7jCL9H0UMKmd11oWEaaeJ76FLX7AavO29UC+q6dbCZ41RPw==
+"@here/harp-lines@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-lines/-/harp-lines-0.12.0.tgz#86567aa76559db7ac209c37b7b842426a10ac7af"
+  integrity sha512-DRjraRxcdbA7F664d6hVKUEq9QNknDSzcnVyC9Sr68RbzaQtgWeyDKxTdSqi+lZ2PPw2zPN6B86/HwxnRyhP9A==
   dependencies:
-    "@here/harp-materials" "^0.11.0"
+    "@here/harp-materials" "^0.12.0"
 
-"@here/harp-lrucache@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-lrucache/-/harp-lrucache-0.11.0.tgz#a2329db9319ff4a8141f57090b70122b656a5e7d"
-  integrity sha512-Nzh0napuOGxQNEHun+sA+gakEz9lYpaHJu/Da0F2hDdjD0yTZ9zcNN2c7MvKHcHEY4Iace4erPpBlT4vSKkmTA==
+"@here/harp-lrucache@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-lrucache/-/harp-lrucache-0.12.0.tgz#3e5b62f189190955742467cb6253fc16cee42cf5"
+  integrity sha512-585pQ71axKTVUGfd58dcVYAWLK3yx7YwIP4nPaVFSA889vutiKZZ8tScMI2arm/EGSYLP2J5CzUa+C5x3JtdKQ==
   dependencies:
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-utils" "^0.12.0"
 
-"@here/harp-map-controls@~0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-map-controls/-/harp-map-controls-0.11.0.tgz#36a869631507e0568a37552400c8d1c528570ccc"
-  integrity sha512-Z0CFD/GcIJD80YYlrMfvdH5MmB3r7PI+5Ed7N0ApTDGHsgXgXeHQeniDg77/+L1z+Nh4l6/id599mOtzFx+J7w==
+"@here/harp-map-controls@~0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-map-controls/-/harp-map-controls-0.12.0.tgz#47b7472494b38ec04deaca985eccfa505c384523"
+  integrity sha512-g1scxO/px8QaVYIpzj0dPnbBb6ISJqp5pP9FMn2/XtowOFks8dwsjxyemHLVRZKP81t/ZAPVNmwr1cfj6F6bEQ==
   dependencies:
-    "@here/harp-geoutils" "^0.11.0"
-    "@here/harp-mapview" "^0.11.0"
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-geoutils" "^0.12.0"
+    "@here/harp-mapview" "^0.12.0"
+    "@here/harp-utils" "^0.12.0"
     "@tweenjs/tween.js" "^17.4.0"
     "@types/tween.js" "^17.2.0"
 
-"@here/harp-map-theme@~0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-map-theme/-/harp-map-theme-0.11.0.tgz#ab1f3da0e757a64d1ef19d028f7de3407f82e33a"
-  integrity sha512-TggsylJI9pqzEtDKQt+EHd+tWKuI9ieo0nBf8sbyifXvAWKflVG6Q7lPOC0DkMTXo3/JJ/S1HWG3jydBgC9EAA==
+"@here/harp-map-theme@~0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-map-theme/-/harp-map-theme-0.12.0.tgz#3b529135b836e15d575c062ce164484d6cecc910"
+  integrity sha512-ARZfxtQkpp+ibPQGRLAD69nWfoDJN/cAj5lgAk/8e9Snh9ymkpcF6vtUZeoL+SaN0/bRQnw+yYozLKqh2groEw==
 
-"@here/harp-mapview-decoder@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-mapview-decoder/-/harp-mapview-decoder-0.11.0.tgz#c59b5af2cb298821e2cb829aff3524d998df5720"
-  integrity sha512-B/TUcmJKqRKCsbgaDiCkjvc4nb0bIBkYV3TDxa+31CS4pexd1i1o9lJYoqw0ER0grpjR1Ye45vv5Y+pyScW+SQ==
+"@here/harp-mapview-decoder@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-mapview-decoder/-/harp-mapview-decoder-0.12.0.tgz#4b053d8a4ae41de0d0caa178c4d892927aedaf4c"
+  integrity sha512-rKicl06ZZj+a5i3BMtuuJN5K0HcsrCDsHrWE3tvp7Z82B3eA3QpFA8KJGlkt8ZIj+/pjgxqJaPkLSpSEaPAndA==
   dependencies:
-    "@here/harp-datasource-protocol" "^0.11.0"
-    "@here/harp-fetch" "^0.11.0"
-    "@here/harp-geoutils" "^0.11.0"
-    "@here/harp-lrucache" "^0.11.0"
-    "@here/harp-mapview" "^0.11.0"
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-datasource-protocol" "^0.12.0"
+    "@here/harp-fetch" "^0.12.0"
+    "@here/harp-geoutils" "^0.12.0"
+    "@here/harp-lrucache" "^0.12.0"
+    "@here/harp-mapview" "^0.12.0"
+    "@here/harp-utils" "^0.12.0"
     geojson-vt "^3.2.1"
 
-"@here/harp-mapview@^0.11.0", "@here/harp-mapview@~0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-mapview/-/harp-mapview-0.11.0.tgz#91f9a5c8de1f9045b6f15fe441f468d49f417727"
-  integrity sha512-+zSK/e0oAJxJkxz01UHkbMGdhR8t+BYESfmKZMqXj/GJ6VqzjBAr5pGopu3/i+FKuMy2Wju7yqiSH3KSHb5k7w==
+"@here/harp-mapview@^0.12.0", "@here/harp-mapview@~0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-mapview/-/harp-mapview-0.12.0.tgz#c96e67ef8e8d9ce54c9bfb128c287b4017518d3f"
+  integrity sha512-mEwR8LG0G8svRmKgh46ugMkppJ9asi/Rr6KUw13Rlk10xqaHBDseQCN4IrzZLImDtY1fwnjQnvMf8LqS+M9efA==
   dependencies:
-    "@here/harp-datasource-protocol" "^0.11.0"
-    "@here/harp-fetch" "^0.11.0"
-    "@here/harp-geometry" "^0.11.0"
-    "@here/harp-geoutils" "^0.11.0"
-    "@here/harp-lines" "^0.11.0"
-    "@here/harp-lrucache" "^0.11.0"
-    "@here/harp-materials" "^0.11.0"
-    "@here/harp-text-canvas" "^0.11.0"
-    "@here/harp-transfer-manager" "^0.11.0"
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-datasource-protocol" "^0.12.0"
+    "@here/harp-fetch" "^0.12.0"
+    "@here/harp-geometry" "^0.12.0"
+    "@here/harp-geoutils" "^0.12.0"
+    "@here/harp-lines" "^0.12.0"
+    "@here/harp-lrucache" "^0.12.0"
+    "@here/harp-materials" "^0.12.0"
+    "@here/harp-text-canvas" "^0.12.0"
+    "@here/harp-transfer-manager" "^0.12.0"
+    "@here/harp-utils" "^0.12.0"
     rbush "^3.0.1"
 
-"@here/harp-materials@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-materials/-/harp-materials-0.11.0.tgz#4c4ab47ca890b25f0ba282a4b283126081d63adf"
-  integrity sha512-G/VbrpO1j9H9u/D0R/ReYudSjg41E2/cuwASfO/bDo9pqWCyR6V2Ch/JB7mhg4P9gvuifYTwvayJ+zsOeM3cSw==
+"@here/harp-materials@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-materials/-/harp-materials-0.12.0.tgz#ecb9e4dc57069b941ab0176cd64e35c858fc5fab"
+  integrity sha512-5XprA9DvZ+b7rnHuFc4Qhguqo4p7Bhx7kpb5XDMTvfw/EkEKhk/OltUK4DKrwYoOsbrsLKoy4KDh8X+fcPNpXA==
   dependencies:
-    "@here/harp-datasource-protocol" "^0.11.0"
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-datasource-protocol" "^0.12.0"
+    "@here/harp-utils" "^0.12.0"
 
-"@here/harp-omv-datasource@~0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-omv-datasource/-/harp-omv-datasource-0.11.0.tgz#9ea2227d82e0882aaa528ecba846e702ade87a93"
-  integrity sha512-6rVf2EIbpi9OPNzdp3VA3mmBk+MY47hkL0GS4oQFRgyusv6VAMAWCjnABpNx4UEQ+blWhpo0rDfPy/vXt3AFDQ==
+"@here/harp-omv-datasource@~0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-omv-datasource/-/harp-omv-datasource-0.12.0.tgz#c09809b396362a6f913e7a1c540a1e8ba5092594"
+  integrity sha512-AmFW+0DTtMNjv7/eGJSEjmLlqKnL3QAFLWDXbtyLAETETCaMEmbNO6vvWrdIg2TNeC6nJQMUbGv39+X8NYovHw==
   dependencies:
-    "@here/harp-datasource-protocol" "^0.11.0"
-    "@here/harp-geometry" "^0.11.0"
-    "@here/harp-geoutils" "^0.11.0"
-    "@here/harp-lines" "^0.11.0"
-    "@here/harp-lrucache" "^0.11.0"
-    "@here/harp-mapview" "^0.11.0"
-    "@here/harp-mapview-decoder" "^0.11.0"
-    "@here/harp-text-canvas" "^0.11.0"
-    "@here/harp-transfer-manager" "^0.11.0"
-    "@here/harp-utils" "^0.11.0"
+    "@here/harp-datasource-protocol" "^0.12.0"
+    "@here/harp-geometry" "^0.12.0"
+    "@here/harp-geoutils" "^0.12.0"
+    "@here/harp-lines" "^0.12.0"
+    "@here/harp-lrucache" "^0.12.0"
+    "@here/harp-mapview" "^0.12.0"
+    "@here/harp-mapview-decoder" "^0.12.0"
+    "@here/harp-materials" "^0.12.0"
+    "@here/harp-text-canvas" "^0.12.0"
+    "@here/harp-transfer-manager" "^0.12.0"
+    "@here/harp-utils" "^0.12.0"
     earcut "^2.1.3"
     long "^4.0.0"
     protobufjs "^6.8.4"
 
-"@here/harp-text-canvas@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-text-canvas/-/harp-text-canvas-0.11.0.tgz#6cd78b920046f24f923cfe320076af7952ba9807"
-  integrity sha512-0Sq3g3rhFclaMzci5YvVb8QfkVSPdqrMVIBbLADx5uV2KqNo2KdzRTlsBPgrWLcYUvdr246a66QvilH0HbwaXg==
+"@here/harp-text-canvas@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-text-canvas/-/harp-text-canvas-0.12.0.tgz#b85f5c5dd5a9b8c9a9ff130fbf2cee2910b11c5e"
+  integrity sha512-279p41A5+eypFS4jWZ6Mzcvm5QX0GK48Mnwz9WJV6QMNIbJhtAWSZ1pBxulgQiRnDc8abs8biYEJ0ihfaqU74A==
   dependencies:
-    "@here/harp-lrucache" "^0.11.0"
+    "@here/harp-lrucache" "^0.12.0"
 
-"@here/harp-transfer-manager@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-transfer-manager/-/harp-transfer-manager-0.11.0.tgz#f22274eac1b6e4947e571824ef1d6ded6ebcd073"
-  integrity sha512-b9M1VqUirzHy398x1WHvLZ7WTSeqqR0Ph3uFjSaRQ+ySu2bv2j/WXfk2szP/g8/PLjuWs4MEj1XfW7Z5GZKoOA==
+"@here/harp-transfer-manager@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-transfer-manager/-/harp-transfer-manager-0.12.0.tgz#efce704c8d8c6c5fb3f1c8886a0c4999edc06a66"
+  integrity sha512-s/UYWYH5fFdoPKohONLSwbz7LWSyDbYBDN4JjAgvFrKZrdCDhbYJVD/Ib0jfdLOJiRYCCPBHCfjHhBKbcTUJ0g==
   dependencies:
-    "@here/harp-fetch" "^0.11.0"
+    "@here/harp-fetch" "^0.12.0"
 
-"@here/harp-utils@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-utils/-/harp-utils-0.11.0.tgz#30bf61f860c36d22ecb413bca4e85c1e2e3b13f5"
-  integrity sha512-k8eRzzbDqnkAiFAcmi2G4McTW/cGW+mqmAFmc5yC4ozvaZ2f+E+536Og5H/COewdPLvJFrLpsAKQzodfHhIYBg==
+"@here/harp-utils@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/@here/harp-utils/-/harp-utils-0.12.0.tgz#37bb0ebda597608b722d650fc5147e525541413a"
+  integrity sha512-zbfCs1hNMdHZnei2vafps4nx3ZWPyMjf/PTgyS0DnxlUJKqbB9I5zS7R0imy8Azmbh1Z7ewu+DzOx1+S5GEugw==
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -5380,10 +5381,10 @@ terser@^4.1.2:
     source-map "~0.6.1"
     source-map-support "~0.5.12"
 
-three@^0.110.0:
-  version "0.110.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.110.0.tgz#8719591de1336269113ee79f4268ba247b2324f8"
-  integrity sha512-wlurH8XBO9Sd5VIw8nBa+taLR20kqaI4e9FiuMh6tqK8eOS2q2R+ZoUyufbyDTVTHhs8GiTbv0r2CMLkwerFJg==
+three@^0.112.0:
+  version "0.112.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.112.1.tgz#f8d8f4d0f8e5f753dac6260491b8209457fdc131"
+  integrity sha512-8I0O74hiYtKl3LgDNcPJbBGOlpekbcJ6fJnImmW3mFdeUFJ2H9Y3/UuUSW2sBdjrIlCM0gvOkaTEFlofO900TQ==
 
 throttle-debounce@^2.1.0:
   version "2.1.0"
