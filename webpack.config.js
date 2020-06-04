@@ -37,6 +37,10 @@ const commonConfig = {
             {
                 test: /\.css$/,
                 loader: ["style-loader", "css-loader"]
+            },
+            {
+                test: /\.ttf$/,
+                use: ['file-loader']
             }
         ]
     },

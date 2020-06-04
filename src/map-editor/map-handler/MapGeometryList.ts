@@ -4,12 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 import { MapEnv } from "@here/harp-datasource-protocol/index-decoder";
-import { GeoCoordinates, webMercatorTilingScheme } from "@here/harp-geoutils";
+import { GeoCoordinates, mercatorProjection, webMercatorTilingScheme } from "@here/harp-geoutils";
 import { MapView } from "@here/harp-mapview";
 import { DataProvider } from "@here/harp-mapview-decoder";
 import { OmvDataSource } from "@here/harp-omv-datasource";
 import { OmvProtobufDataAdapter } from "@here/harp-omv-datasource/lib/OmvData";
 
+import { DecodeInfo } from "@here/harp-omv-datasource/lib/DecodeInfo";
 import {
     IGeometryProcessor,
     ILineGeometry,
@@ -68,9 +69,16 @@ class Decoder implements IGeometryProcessor {
  *
  * @param geoPoint The geo coordinates of a point of the tile.
  * @param level The storage level.
+ * @param projection The target projection used by the map view.
+ * @param storageLevelOffset The storage level offset.
  */
 
-async function dumpTile(geoPoint: GeoCoordinates, level: number) {
+async function dumpTile(
+    geoPoint: GeoCoordinates,
+    level: number,
+    projection = mercatorProjection,
+    storageLevelOffset = 0
+) {
     const tileKey = webMercatorTilingScheme.getTileKey(geoPoint, level);
 
     if (!tileKey) {
@@ -82,7 +90,8 @@ async function dumpTile(geoPoint: GeoCoordinates, level: number) {
     const decoder = new Decoder();
     const adapter = new OmvProtobufDataAdapter(decoder);
 
-    adapter.process(buffer, tileKey);
+    const decodeInfo = new DecodeInfo("dump", projection, tileKey, storageLevelOffset);
+    adapter.process(buffer, decodeInfo);
 }
 
 export const getGeometryData = (mapView: MapView, dataSource: OmvDataSource): void => {
