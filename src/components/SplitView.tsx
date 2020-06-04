@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -49,15 +49,15 @@ export default class extends React.Component<Props, State> {
         this.m_separatorPosition = props.separatorPosition || 4;
 
         this.state = {
-            dragStartPosition: null
+            dragStartPosition: null,
         };
 
         this.onSeparatorDragStart = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
             this.setState({
                 dragStartPosition: {
                     x: event.clientX,
-                    y: event.clientY
-                }
+                    y: event.clientY,
+                },
             });
 
             this.m_separatorPositionStart = this.m_separatorPosition;
@@ -134,14 +134,14 @@ export default class extends React.Component<Props, State> {
         return (
             <div
                 className={`split-view ${this.props.mode}`}
-                ref={node => (this.m_container = node)}
+                ref={(node) => (this.m_container = node)}
             >
-                <section ref={node => (this.m_section_a = node)}>{this.props.section_a}</section>
-                <section ref={node => (this.m_section_b = node)}>{this.props.section_b}</section>
+                <section ref={(node) => (this.m_section_a = node)}>{this.props.section_a}</section>
+                <section ref={(node) => (this.m_section_b = node)}>{this.props.section_b}</section>
                 <div
                     onMouseDown={this.onSeparatorDragStart}
                     className="separator"
-                    ref={node => (this.m_separator = node)}
+                    ref={(node) => (this.m_separator = node)}
                 />
                 {mouseCatcher}
             </div>

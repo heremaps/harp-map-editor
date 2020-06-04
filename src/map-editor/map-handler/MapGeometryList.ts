@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Licensed under Apache 2.0, see full license in LICENSE
+ * SPDX-License-Identifier: Apache-2.0
+ */
 import { MapEnv } from "@here/harp-datasource-protocol/index-decoder";
 import { GeoCoordinates, webMercatorTilingScheme } from "@here/harp-geoutils";
 import { MapView } from "@here/harp-mapview";
@@ -8,7 +13,7 @@ import { OmvProtobufDataAdapter } from "@here/harp-omv-datasource/lib/OmvData";
 import {
     IGeometryProcessor,
     ILineGeometry,
-    IPolygonGeometry
+    IPolygonGeometry,
 } from "@here/harp-omv-datasource/lib/IGeometryProcessor";
 import { Vector2 } from "three";
 
@@ -87,7 +92,7 @@ export const getGeometryData = (mapView: MapView, dataSource: OmvDataSource): vo
     );
     dataProvider = dataProvider || dataSource.dataProvider();
 
-    dumpTile(geoPoint, Math.min(mapView.storageLevel, 15)).catch(err => {
+    dumpTile(geoPoint, Math.min(mapView.storageLevel, 15)).catch((err) => {
         // tslint:disable-next-line
         console.log(err);
     });

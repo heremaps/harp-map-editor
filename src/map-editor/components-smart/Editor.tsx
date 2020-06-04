@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -20,7 +20,7 @@ export default class Editor extends Component<any, SettingsState> {
 
         this.state = {
             settings: {},
-            store: {}
+            store: {},
         };
 
         this.connectEvents({
@@ -29,14 +29,14 @@ export default class Editor extends Component<any, SettingsState> {
                 settings.set("editorTabVisible", !settings.get("editorTabVisible"));
             },
             // set the position of the text editor.
-            "editor:setSide": side => {
+            "editor:setSide": (side) => {
                 settings.set("editorTabSide", side);
                 if (side === Side.DeTouch) {
                     TextEditor.createWindow();
                 } else {
                     TextEditor.createIframe();
                 }
-            }
+            },
         });
     }
 
@@ -69,7 +69,7 @@ export default class Editor extends Component<any, SettingsState> {
                 <div
                     id="text-editor"
                     className={`${editorTabSide}`}
-                    ref={node => (this.m_elemEditorTab = node)}
+                    ref={(node) => (this.m_elemEditorTab = node)}
                 />
             );
 

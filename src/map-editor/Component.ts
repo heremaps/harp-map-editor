@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -31,9 +31,9 @@ export default class Component<
      * React component will update.
      */
     connectSettings<A extends keyof AvailableSetting, B extends AvailableSetting[A]>(list: A[]) {
-        list.forEach(key => {
+        list.forEach((key) => {
             const listener = (val: B) => {
-                this.setState(state => {
+                this.setState((state) => {
                     state.settings[key] = val;
                     return state;
                 });
@@ -49,10 +49,10 @@ export default class Component<
      * Receives a list store variables to monitor. If some of specified variables will change the
      * React component will update.
      */
-    connectStore(list: Array<keyof AvailableData>) {
-        list.forEach(key => {
+    connectStore(list: (keyof AvailableData)[]) {
+        list.forEach((key) => {
             const listener = (val: any) => {
-                this.setState(state => {
+                this.setState((state) => {
                     state.store[key] = val;
                     return state;
                 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -30,7 +30,7 @@ interface LayerData {
 const GEOMETRY_TECHNiQUES: { [key in GeometryType]: Techniques[] } = {
     line: ["none", "solid-line", "dashed-line", "line"],
     polygon: ["none", "fill", "solid-line", "dashed-line", "line"],
-    point: ["none", "text", "labeled-icon"]
+    point: ["none", "text", "labeled-icon"],
 };
 
 const LAYERS = Object.keys(DATASOURCE_SCHEMA);
@@ -51,7 +51,7 @@ export default class extends Component<Props, State> {
         this.state = {
             settings: {},
             store: {},
-            techniqueData: props.techniqueData || new TechniqueData()
+            techniqueData: props.techniqueData || new TechniqueData(),
         };
     }
 
@@ -77,7 +77,7 @@ export default class extends Component<Props, State> {
                     ? Expr.parse(techniqueData.when).toJSON()
                     : techniqueData.when,
             description: techniqueData.description,
-            attr: {}
+            attr: {},
         };
 
         switch (MapHandler.addStyleTechnique(style as ResolvedStyleDeclaration)) {
@@ -104,7 +104,7 @@ export default class extends Component<Props, State> {
                     <SelectString
                         values={LAYERS}
                         active={techniqueData.layer}
-                        onSelect={val => {
+                        onSelect={(val) => {
                             techniqueData.layer = val;
                             this.setState({ techniqueData });
                         }}
@@ -121,7 +121,7 @@ export default class extends Component<Props, State> {
                     <SelectString
                         values={layerData.geometry_types}
                         active={techniqueData.geometryType}
-                        onSelect={val => {
+                        onSelect={(val) => {
                             techniqueData.geometryType = val;
                             this.setState({ techniqueData });
                         }}
@@ -139,7 +139,7 @@ export default class extends Component<Props, State> {
                     <SelectString
                         values={techniques}
                         active={techniqueData.technique}
-                        onSelect={val => {
+                        onSelect={(val) => {
                             techniqueData.technique = val;
                             this.setState({ techniqueData });
                         }}
@@ -182,7 +182,7 @@ export default class extends Component<Props, State> {
                     <input
                         className="popup-input"
                         type="text"
-                        ref={elem => (this.m_input = elem)}
+                        ref={(elem) => (this.m_input = elem)}
                         defaultValue={defaultValue}
                     />
                     <ButtonIcon
@@ -210,7 +210,7 @@ export default class extends Component<Props, State> {
                     <input
                         className="popup-input"
                         type="text"
-                        ref={elem => (this.m_input = elem)}
+                        ref={(elem) => (this.m_input = elem)}
                         defaultValue={techniqueData.description}
                     />
                     <ButtonIcon

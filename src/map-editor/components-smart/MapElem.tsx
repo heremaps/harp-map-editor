@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -31,7 +31,7 @@ export default class extends Component<Props, SettingsState> {
 
         this.state = {
             settings: {},
-            store: {}
+            store: {},
         };
 
         this.onResize = () => {
@@ -109,9 +109,9 @@ export default class extends Component<Props, SettingsState> {
     render() {
         return (
             <div id="map-container" className={this.state.settings.editorTabSide as string}>
-                <div id="controls-container" ref={node => (this.m_controlsContainer = node)} />
+                <div id="controls-container" ref={(node) => (this.m_controlsContainer = node)} />
                 <canvas className="map" />
-                <div id="copyright" ref={node => (this.m_elemCopyright = node)} />
+                <div id="copyright" ref={(node) => (this.m_elemCopyright = node)} />
                 <Info />
                 <Menu />
             </div>

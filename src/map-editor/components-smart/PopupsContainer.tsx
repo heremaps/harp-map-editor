@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -18,7 +18,7 @@ export default class PopupsContainer extends Component<any, SettingsState> {
         popups.push({
             name,
             component: <span>{message}</span>,
-            options: {}
+            options: {},
         });
         settings.setStoreData("popups", popups);
     }
@@ -40,10 +40,10 @@ export default class PopupsContainer extends Component<any, SettingsState> {
         super(props);
         this.state = {
             settings: {},
-            store: {}
+            store: {},
         };
 
-        window.addEventListener("keyup", event => {
+        window.addEventListener("keyup", (event) => {
             const popups = this.state.store.popups as Popup[];
             if (event.key !== "Escape" || popups.length === 0) {
                 return;
@@ -85,7 +85,7 @@ export default class PopupsContainer extends Component<any, SettingsState> {
                         >
                             <section
                                 className={"window" + (exitButton ? " close-button" : "")}
-                                onClick={event => event.stopPropagation()}
+                                onClick={(event) => event.stopPropagation()}
                             >
                                 <header>
                                     {popup.name}
@@ -93,7 +93,7 @@ export default class PopupsContainer extends Component<any, SettingsState> {
                                         <ButtonIcon
                                             icon={ICONS.close}
                                             title="Close"
-                                            onClick={event => this.closePopup(popup)}
+                                            onClick={(event) => this.closePopup(popup)}
                                         />
                                     ) : null}
                                 </header>
