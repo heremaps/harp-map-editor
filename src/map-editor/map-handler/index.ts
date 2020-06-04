@@ -107,7 +107,7 @@ class MapHandler extends EventEmitter {
             const targetWorld = MapViewUtils.rayCastWorldCoordinates(this.m_mapView, 0, 0);
             const target = this.m_mapView.projection.unprojectPoint(targetWorld!);
             const state = new MapViewState(
-                this.m_mapView.lookAtDistance,
+                this.m_mapView.targetDistance,
                 target,
                 -this.m_controls.attitude.yaw,
                 this.m_controls.attitude.pitch
@@ -289,7 +289,7 @@ class MapHandler extends EventEmitter {
         const currentStyleSet = theme.styles[currentStyle];
 
         const descriptionIsExist = currentStyleSet.some(
-            (item) => (item as BaseStyle).description === style.description
+            (item) => (item as BaseStyle<string, any>).description === style.description
         );
 
         if (descriptionIsExist) {
