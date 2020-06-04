@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -14,7 +14,7 @@ import {
     FiSidebar,
     FiSquare,
     FiTerminal,
-    FiX
+    FiX,
 } from "react-icons/fi";
 import {
     IoIosColorPalette,
@@ -26,7 +26,7 @@ import {
     IoMdCode,
     IoMdColorFilter,
     IoMdDownload,
-    IoMdEye
+    IoMdEye,
 } from "react-icons/io";
 import { Side } from "../../types";
 

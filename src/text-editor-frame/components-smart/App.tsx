@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -19,7 +19,7 @@ export default class App extends React.Component<any, State> {
         super(props);
         this.state = {
             notificationsVisible: false,
-            notificationsSize: 0
+            notificationsSize: 0,
         };
 
         textEditor.on("InitData", ({ notificationsVisible, notificationsSize }) => {
@@ -40,7 +40,7 @@ export default class App extends React.Component<any, State> {
                     section_a={<TextEditorElem />}
                     section_b={<Notifications />}
                     mode="vertical"
-                    onChange={size => {
+                    onChange={(size) => {
                         textEditor.resize();
                         textEditor.updateMessagesSize(size);
                     }}

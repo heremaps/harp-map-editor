@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -18,10 +18,10 @@ export default class extends React.Component<any, State> {
     constructor(props: {}) {
         super(props);
         this.state = {
-            notifications: []
+            notifications: [],
         };
 
-        this.onNotificationUpdate = notifications => {
+        this.onNotificationUpdate = (notifications) => {
             this.setState({ notifications });
         };
     }
@@ -44,7 +44,7 @@ export default class extends React.Component<any, State> {
                         return (
                             <li className={message.severity > 6 ? "error" : ""} key={i}>
                                 <TextButton
-                                    onClick={event => {
+                                    onClick={(event) => {
                                         textEditor.setCursor(
                                             message.startLineNumber,
                                             message.startColumn

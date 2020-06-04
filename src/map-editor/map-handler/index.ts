@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -10,7 +10,7 @@ import {
     CopyrightInfo,
     MapView,
     MapViewEventNames,
-    MapViewUtils
+    MapViewUtils,
 } from "@here/harp-mapview";
 import { APIFormat, OmvDataSource } from "@here/harp-omv-datasource";
 import { OmvTileDecoder } from "@here/harp-omv-datasource/lib/OmvDecoder";
@@ -95,7 +95,7 @@ class MapHandler extends EventEmitter {
             id: "here.com",
             year: new Date().getFullYear(),
             label: "HERE",
-            link: "https://legal.here.com/terms"
+            link: "https://legal.here.com/terms",
         };
 
         this.m_copyrights = [hereCopyrightInfo];
@@ -162,7 +162,7 @@ class MapHandler extends EventEmitter {
             this.m_mapView = new MapView({
                 canvas: this.m_canvasElem,
                 decoderUrl: "decoder.bundle.js",
-                theme
+                theme,
             });
 
             this.m_controls = new MapControls(this.m_mapView);
@@ -182,7 +182,7 @@ class MapHandler extends EventEmitter {
                 maxZoomLevel: 17,
                 authenticationCode: accessToken,
                 copyrightInfo: this.m_copyrights,
-                decoder: new OmvTileDecoder()
+                decoder: new OmvTileDecoder(),
             });
 
             this.m_copyrightHandler = CopyrightElementHandler.install(
@@ -269,7 +269,7 @@ class MapHandler extends EventEmitter {
                 }
                 return typeof val === "string" ? `${key} == '${val}'` : `${key} == ${val}`;
             })
-            .filter(item => item !== undefined)
+            .filter((item) => item !== undefined)
             .join(" && ");
     }
 
@@ -289,7 +289,7 @@ class MapHandler extends EventEmitter {
         const currentStyleSet = theme.styles[currentStyle];
 
         const descriptionIsExist = currentStyleSet.some(
-            item => (item as BaseStyle).description === style.description
+            (item) => (item as BaseStyle).description === style.description
         );
 
         if (descriptionIsExist) {

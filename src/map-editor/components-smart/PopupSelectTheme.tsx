@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -17,16 +17,16 @@ import * as themeNight from "@here/harp-map-theme/resources/berlin_tilezen_night
 const DEFAULT_THEMES = [
     {
         name: "Day",
-        theme: JSON.stringify(themeBase as any, undefined, 2)
+        theme: JSON.stringify(themeBase as any, undefined, 2),
     },
     {
         name: "Day - reduced",
-        theme: JSON.stringify(themeReduced as any, undefined, 2)
+        theme: JSON.stringify(themeReduced as any, undefined, 2),
     },
     {
         name: "Night - reduced",
-        theme: JSON.stringify(themeNight as any, undefined, 2)
-    }
+        theme: JSON.stringify(themeNight as any, undefined, 2),
+    },
 ];
 
 interface Stae extends SettingsState {
@@ -56,7 +56,7 @@ export default class extends Component<Props, Stae> {
             this.m_tabs.push({
                 name: "Switch style",
                 component: null,
-                disabled: true
+                disabled: true,
             });
         } else {
             this.m_tabs.push({
@@ -81,7 +81,7 @@ export default class extends Component<Props, Stae> {
                             })}
                         </ul>
                     </div>
-                )
+                ),
             });
         }
 
@@ -107,13 +107,13 @@ export default class extends Component<Props, Stae> {
                         })}
                     </ul>
                 </div>
-            )
+            ),
         });
 
         this.state = {
-            activeTab: this.m_tabs.filter(tab => !tab.disabled)[0],
+            activeTab: this.m_tabs.filter((tab) => !tab.disabled)[0],
             store: {},
-            settings: {}
+            settings: {},
         };
     }
 
@@ -126,7 +126,7 @@ export default class extends Component<Props, Stae> {
             <Tabs
                 tabs={this.m_tabs}
                 active={this.state.activeTab}
-                onChange={tab => this.setState({ activeTab: tab })}
+                onChange={(tab) => this.setState({ activeTab: tab })}
                 id="switch-style"
             />
         );
