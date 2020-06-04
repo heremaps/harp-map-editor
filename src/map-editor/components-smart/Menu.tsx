@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -18,7 +18,7 @@ import PopupSelectTheme from "./PopupSelectTheme";
 enum MenuState {
     Idle,
     SelectSide,
-    Hidden
+    Hidden,
 }
 
 interface Props extends SettingsState {
@@ -40,7 +40,7 @@ export default class Menu extends Component<{}, Props> {
                     done={() => PopupsContainer.removePopup(popup)}
                     techniqueData={techniqueData}
                 />
-            )
+            ),
         };
         PopupsContainer.addPopup(popup);
     }
@@ -51,7 +51,7 @@ export default class Menu extends Component<{}, Props> {
         this.state = {
             menuState: MenuState.Idle,
             settings: {},
-            store: {}
+            store: {},
         };
     }
 
@@ -61,7 +61,7 @@ export default class Menu extends Component<{}, Props> {
             "editorTabVisible",
             "editorTabSide",
             "editorInfoPick",
-            "notificationsVisible"
+            "notificationsVisible",
         ]);
         this.connectStore(["styles", "parsedTheme", "notificationsState"]);
     }
@@ -80,8 +80,8 @@ export default class Menu extends Component<{}, Props> {
                 title: "Show / Hide",
                 onClick: () => {
                     settings.emit("editor:toggle");
-                }
-            }
+                },
+            },
         ];
 
         if (!editorTabVisible) {
@@ -99,14 +99,14 @@ export default class Menu extends Component<{}, Props> {
                         disabled: !themeIsValid,
                         onClick: () => {
                             TextEditor.download();
-                        }
+                        },
                     },
                     {
                         icon: ICONS.open,
                         title: "Open file",
                         onClick: () => {
                             TextEditor.openFile();
-                        }
+                        },
                     },
                     {
                         icon: ICONS.format,
@@ -114,7 +114,7 @@ export default class Menu extends Component<{}, Props> {
                         disabled: !themeIsValid,
                         onClick: () => {
                             TextEditor.formatFile();
-                        }
+                        },
                     },
                     {
                         icon: ICONS[editorTabSide],
@@ -122,47 +122,47 @@ export default class Menu extends Component<{}, Props> {
                         className: editorTabSide,
                         onClick: () => {
                             this.setState({ menuState: MenuState.SelectSide });
-                        }
+                        },
                     },
                     {
                         icon: ICONS.commands,
                         title: "Show quick command palette",
                         onClick: () => {
                             TextEditor.showCommands();
-                        }
+                        },
                     },
                     {
                         icon: ICONS.undo,
                         title: "Undo",
                         onClick: () => {
                             TextEditor.undo();
-                        }
+                        },
                     },
                     {
                         icon: ICONS.redo,
                         title: "Redo",
                         onClick: () => {
                             TextEditor.redo();
-                        }
+                        },
                     },
                     {
                         icon: ICONS.link,
                         title: "Get link",
                         onClick: () => {
-                            settings.getSettingsURL().then(link => {
+                            settings.getSettingsURL().then((link) => {
                                 PopupsContainer.addPopup({
                                     id: "share-link-popup",
                                     name: "Link",
-                                    component: <PopupSelectLink link={link} />
+                                    component: <PopupSelectLink link={link} />,
                                 });
                             });
-                        }
+                        },
                     },
                     {
                         icon: ICONS.magicStick,
                         title: "Construct new style technique",
                         disabled: !themeIsValid,
-                        onClick: () => Menu.openNewTechniquePopup()
+                        onClick: () => Menu.openNewTechniquePopup(),
                     },
                     {
                         icon: ICONS.picker,
@@ -170,7 +170,7 @@ export default class Menu extends Component<{}, Props> {
                         active: settings.get("editorInfoPick"),
                         onClick: () => {
                             settings.set("editorInfoPick", !settings.get("editorInfoPick"));
-                        }
+                        },
                     },
                     this.createNotificationsButton()
                 );
@@ -188,7 +188,7 @@ export default class Menu extends Component<{}, Props> {
                             onClick: () => {
                                 settings.emit("editor:setSide", side);
                                 this.setState({ menuState: MenuState.Idle });
-                            }
+                            },
                         };
                     }
                 );
@@ -223,10 +223,10 @@ export default class Menu extends Component<{}, Props> {
                 const popup = {
                     name: "Switch styles",
                     options: {},
-                    component: <PopupSelectTheme done={() => PopupsContainer.removePopup(popup)} />
+                    component: <PopupSelectTheme done={() => PopupsContainer.removePopup(popup)} />,
                 };
                 PopupsContainer.addPopup(popup);
-            }
+            },
         };
     }
 
@@ -241,10 +241,10 @@ export default class Menu extends Component<{}, Props> {
                     options: {},
                     component: (
                         <PopupGeometriesList done={() => PopupsContainer.removePopup(popup)} />
-                    )
+                    ),
                 };
                 PopupsContainer.addPopup(popup);
-            }
+            },
         };
     }
 
@@ -272,7 +272,7 @@ export default class Menu extends Component<{}, Props> {
             active: notificationsVisible,
             onClick: () => {
                 settings.set("notificationsVisible", !notificationsVisible);
-            }
+            },
         };
     }
 }

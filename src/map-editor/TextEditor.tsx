@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -64,7 +64,7 @@ class TextEditor {
                         column: settings.get("textEditor:column"),
                         line: settings.get("textEditor:line"),
                         notificationsVisible: settings.get("notificationsVisible"),
-                        notificationsSize: settings.get("notificationsSize")
+                        notificationsSize: settings.get("notificationsSize"),
                     });
                     break;
                 case "HighlightFeature":
@@ -83,7 +83,7 @@ class TextEditor {
                 case "UpdateNotificationsCount":
                     settings.setStoreData("notificationsState", {
                         count: msg.count,
-                        severity: msg.severity
+                        severity: msg.severity,
                     });
                     break;
                 case "UpdateNotificationsSize":
@@ -106,11 +106,11 @@ class TextEditor {
             }
         });
 
-        settings.on("setting:notificationsVisible", notificationsVisible => {
+        settings.on("setting:notificationsVisible", (notificationsVisible) => {
             this.sendMsg({
                 command: "ToggleNotifications",
                 notificationsVisible,
-                notificationsSize: settings.get("notificationsSize")
+                notificationsSize: settings.get("notificationsSize"),
             });
         });
     }
@@ -207,14 +207,14 @@ class TextEditor {
      */
     openFile() {
         openFile()
-            .then(value => {
+            .then((value) => {
                 this.setValue(value);
             })
             .catch(() => {
                 const popup = {
                     name: "ERROR",
                     options: {},
-                    component: <p>Can't open file.</p>
+                    component: <p>Can't open file.</p>,
                 };
                 PopupsContainer.addPopup(popup);
             });
@@ -242,7 +242,7 @@ class TextEditor {
         this.sendMsg({
             command: "SetCursor",
             column,
-            line
+            line,
         });
     }
 
@@ -264,7 +264,7 @@ class TextEditor {
 
         if (this.m_parsedTheme.styles !== undefined) {
             const values = Object.values(this.m_parsedTheme.styles);
-            if (values.length > 0 && values.every(value => Array.isArray(value))) {
+            if (values.length > 0 && values.every((value) => Array.isArray(value))) {
                 styles = Object.keys(this.m_parsedTheme.styles);
             }
         }
@@ -311,7 +311,7 @@ async function openFile(): Promise<string> {
     return new Promise((resolve, reject) => {
         fileBrowser.addEventListener(
             "change",
-            event => {
+            (event) => {
                 if (!event || !event.target) {
                     return reject("");
                 }
@@ -333,7 +333,7 @@ async function openFile(): Promise<string> {
             },
             false
         );
-    }).then(str => {
+    }).then((str) => {
         removeObj();
         return str as string;
     });

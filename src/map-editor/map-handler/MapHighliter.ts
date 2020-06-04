@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -23,26 +23,26 @@ class MapHighlighter {
                 technique: "line",
                 attr: {
                     transparent: true,
-                    color: "red"
-                }
+                    color: "red",
+                },
             },
             {
                 when: "$geometryType == 'polygon'",
                 technique: "fill",
                 attr: {
                     transparent: true,
-                    color: "red"
-                }
+                    color: "red",
+                },
             },
             {
                 when: "$geometryType == 'point'",
                 technique: "circles",
                 attr: {
                     color: "red",
-                    size: 10
-                }
-            }
-        ]
+                    size: 10,
+                },
+            },
+        ],
     };
 
     constructor() {
@@ -53,7 +53,7 @@ class MapHighlighter {
             styleSetName: "tilezen",
             maxZoomLevel: 17,
             authenticationCode: accessToken,
-            decoder: new OmvTileDecoder()
+            decoder: new OmvTileDecoder(),
         });
     }
 

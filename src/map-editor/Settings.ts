@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -261,9 +261,9 @@ class Settings<SType extends object, StType> extends EventEmitter {
             .generateAsync({
                 type: "base64",
                 compression: "DEFLATE",
-                compressionOptions: { level: 9 }
+                compressionOptions: { level: 9 },
             })
-            .then(content => {
+            .then((content) => {
                 // tslint:disable-next-line: max-line-length
                 return `${window.location.origin}${window.location.pathname}?${this.m_restoreUrlParamName}=${content}`;
             });
@@ -289,7 +289,7 @@ class Settings<SType extends object, StType> extends EventEmitter {
 
         window.history.pushState({}, "", window.location.origin + window.location.pathname);
         const zip = await jszip.loadAsync(query[this.m_restoreUrlParamName] as string, {
-            base64: true
+            base64: true,
         });
 
         if (!zip.files["settings.json"]) {
@@ -315,9 +315,9 @@ class Settings<SType extends object, StType> extends EventEmitter {
         }
 
         const userSettings = JSON.parse(data);
-        const keys = Object.keys(this.m_settings) as Array<keyof SType>;
+        const keys = Object.keys(this.m_settings) as (keyof SType)[];
 
-        keys.forEach(key => {
+        keys.forEach((key) => {
             if (userSettings.hasOwnProperty(key)) {
                 this.m_settings[key] = userSettings[key];
             }
@@ -340,7 +340,7 @@ const settings = new Settings<AvailableSetting, AvailableData>(
         notificationsSize: 800,
         "textEditor:column": 1,
         "textEditor:line": 1,
-        "textEditor:sourceCode": JSON.stringify(theme as any, undefined, 4)
+        "textEditor:sourceCode": JSON.stringify(theme as any, undefined, 4),
     },
     { popups: [], styles: [], notificationsState: { count: 0, severity: 0 } }
 );

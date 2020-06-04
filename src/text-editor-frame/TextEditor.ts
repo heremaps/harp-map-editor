@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -37,18 +37,18 @@ export class TextEditor extends EventEmitter {
                 {
                     uri: "https://github.com/heremaps/harp.gl/theme.scheme.json",
                     fileMatch: [".theme.json"],
-                    schema
-                }
-            ]
+                    schema,
+                },
+            ],
         });
 
         this.m_editor = monaco.editor.create(this.m_editorElem, {
             language: "json",
-            model: this.m_model
+            model: this.m_model,
         });
 
         window.addEventListener("resize", () => this.resize());
-        window.addEventListener("message", data => {
+        window.addEventListener("message", (data) => {
             if (
                 !data.isTrusted ||
                 data.origin !== window.location.origin ||
@@ -81,21 +81,18 @@ export class TextEditor extends EventEmitter {
                                 ),
                                 options: {
                                     isWholeLine: true,
-                                    inlineClassName: "highlightedLine"
-                                }
-                            }
+                                    inlineClassName: "highlightedLine",
+                                },
+                            },
                         ]);
-                        const lineText = text
-                            .split(":")[1]
-                            .trim()
-                            .replace(/"/g, "");
+                        const lineText = text.split(":")[1].trim().replace(/"/g, "");
                         this.sendMsg({ command: "HighlightFeature", condition: lineText });
                     }
                 } catch (err) {
                     // nothing here
                 }
                 return null;
-            }
+            },
         });
 
         // Inform the Theme editor that the text editor is ready. The Theme editor then will send a
@@ -115,7 +112,7 @@ export class TextEditor extends EventEmitter {
                     command: "UpdateSourceValue",
                     line: change.range.startLineNumber,
                     column: change.range.startColumn,
-                    value: code
+                    value: code,
                 });
             })
         );
@@ -127,7 +124,7 @@ export class TextEditor extends EventEmitter {
                 this.sendMsg({
                     command: "UpdateCursorPosition",
                     line: event.position.lineNumber,
-                    column: event.position.column
+                    column: event.position.column,
                 });
             })
         );
@@ -143,13 +140,13 @@ export class TextEditor extends EventEmitter {
                 this.sendMsg({
                     command: "UpdateNotificationsCount",
                     count: 0,
-                    severity: 0
+                    severity: 0,
                 });
             } else {
                 this.sendMsg({
                     command: "UpdateNotificationsCount",
                     count: this.m_monacoNotifications.length,
-                    severity: this.m_monacoNotifications[0].severity
+                    severity: this.m_monacoNotifications[0].severity,
                 });
             }
         }, 500);
@@ -191,7 +188,7 @@ export class TextEditor extends EventEmitter {
                 // flatten all styles
                 .reduce((a, b) => [...a, ...b], [])
                 // find "when" props with errors
-                .map(style => {
+                .map((style) => {
                     if (typeof style.when === "string") {
                         try {
                             Expr.parse(style.when);
@@ -201,10 +198,10 @@ export class TextEditor extends EventEmitter {
                     }
                     return undefined;
                 })
-                .filter(query => query !== undefined)
+                .filter((query) => query !== undefined)
                 // create Markers from errors
-                .map(query => {
-                    const startLineNumber = lines.findIndex(line =>
+                .map((query) => {
+                    const startLineNumber = lines.findIndex((line) =>
                         line.includes((query as string[])[0])
                     );
                     const startColumn = lines[startLineNumber].indexOf((query as string[])[0]);
@@ -216,7 +213,7 @@ export class TextEditor extends EventEmitter {
                         severity: 8,
                         message: (query as string[])[1],
                         owner: "editor-lint",
-                        resource: this.m_modelUri
+                        resource: this.m_modelUri,
                     };
                     return result;
                 });

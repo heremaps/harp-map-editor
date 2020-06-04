@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017-2020 HERE Europe B.V.
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -17,7 +17,7 @@ export default class extends Component<any, State> {
         this.state = {
             settings: {},
             store: {},
-            intersectInfo: {}
+            intersectInfo: {},
         };
     }
 
@@ -49,7 +49,7 @@ export default class extends Component<any, State> {
                 <div
                     id="intersect-info"
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(this.state.intersectInfo, undefined, 2)
+                        __html: JSON.stringify(this.state.intersectInfo, undefined, 2),
                     }}
                 />
             );
