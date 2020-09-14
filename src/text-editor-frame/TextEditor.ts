@@ -3,7 +3,7 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ResolvedStyleDeclaration } from "@here/harp-datasource-protocol";
+import { Style } from "@here/harp-datasource-protocol";
 import { Expr } from "@here/harp-datasource-protocol/lib/Expr";
 import { EventEmitter } from "events";
 import * as monaco from "monaco-editor";
@@ -184,7 +184,7 @@ export class TextEditor extends EventEmitter {
             const data = JSON.parse(code);
             const lines = code.split("\n");
 
-            markers = Object.values(data.styles as { [key: string]: ResolvedStyleDeclaration[] })
+            markers = Object.values(data.styles as { [key: string]: Style[] })
                 // flatten all styles
                 .reduce((a, b) => [...a, ...b], [])
                 // find "when" props with errors
