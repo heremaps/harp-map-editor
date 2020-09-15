@@ -3,7 +3,7 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { ResolvedStyleDeclaration } from "@here/harp-datasource-protocol";
+import { Style } from "@here/harp-datasource-protocol";
 import { Expr } from "@here/harp-datasource-protocol/lib/Expr";
 import * as React from "react";
 import { GeometryType, TechniqueData, Techniques } from "../../types";
@@ -80,7 +80,7 @@ export default class extends Component<Props, State> {
             attr: {},
         };
 
-        switch (MapHandler.addStyleTechnique(style as ResolvedStyleDeclaration)) {
+        switch (MapHandler.addStyleTechnique(style as Style)) {
             case "err":
                 PopupsContainer.alertPopup("Error", "Can't create style.");
                 break;

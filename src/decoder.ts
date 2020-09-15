@@ -3,6 +3,6 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { OmvTileDecoderService } from "@here/harp-omv-datasource/index-worker";
+import { VectorTileDecoderService } from "@here/harp-vectortile-datasource/index-worker";
 
-OmvTileDecoderService.start();
+VectorTileDecoderService.start();

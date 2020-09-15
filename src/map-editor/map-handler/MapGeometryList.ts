@@ -7,15 +7,15 @@ import { MapEnv } from "@here/harp-datasource-protocol/index-decoder";
 import { GeoCoordinates, mercatorProjection, webMercatorTilingScheme } from "@here/harp-geoutils";
 import { MapView } from "@here/harp-mapview";
 import { DataProvider } from "@here/harp-mapview-decoder";
-import { OmvDataSource } from "@here/harp-omv-datasource";
-import { OmvProtobufDataAdapter } from "@here/harp-omv-datasource/lib/OmvData";
+import { VectorTileDataSource } from "@here/harp-vectortile-datasource";
+import { OmvDataAdapter } from "@here/harp-vectortile-datasource/lib/adapters/omv/OmvDataAdapter";
 
-import { DecodeInfo } from "@here/harp-omv-datasource/lib/DecodeInfo";
+import { DecodeInfo } from "@here/harp-vectortile-datasource/lib/DecodeInfo";
 import {
     IGeometryProcessor,
     ILineGeometry,
     IPolygonGeometry,
-} from "@here/harp-omv-datasource/lib/IGeometryProcessor";
+} from "@here/harp-vectortile-datasource/lib/IGeometryProcessor";
 import { Vector2 } from "three";
 
 //
@@ -88,13 +88,13 @@ async function dumpTile(
     geometryList = {};
     const buffer = (await dataProvider.getTile(tileKey)) as ArrayBuffer;
     const decoder = new Decoder();
-    const adapter = new OmvProtobufDataAdapter(decoder);
+    const adapter = new OmvDataAdapter(decoder);
 
     const decodeInfo = new DecodeInfo("dump", projection, tileKey, storageLevelOffset);
     adapter.process(buffer, decodeInfo);
 }
 
-export const getGeometryData = (mapView: MapView, dataSource: OmvDataSource): void => {
+export const getGeometryData = (mapView: MapView, dataSource: VectorTileDataSource): void => {
     const geoPoint = new GeoCoordinates(
         mapView.geoCenter.latitude % 180,
         mapView.geoCenter.longitude % 180
