@@ -3,7 +3,7 @@
  * Licensed under Apache 2.0, see full license in LICENSE
  * SPDX-License-Identifier: Apache-2.0
  */
-import { BaseStyle, ResolvedStyleDeclaration, Theme } from "@here/harp-datasource-protocol";
+import { BaseStyle, Style, Theme } from "@here/harp-datasource-protocol";
 import { MapControls } from "@here/harp-map-controls";
 import {
     CopyrightElementHandler,
@@ -12,9 +12,9 @@ import {
     MapViewEventNames,
     MapViewUtils,
 } from "@here/harp-mapview";
-import { APIFormat, OmvDataSource } from "@here/harp-omv-datasource";
-import { OmvTileDecoder } from "@here/harp-omv-datasource/lib/OmvDecoder";
 import { LoggerManager } from "@here/harp-utils";
+import { APIFormat, VectorTileDataSource } from "@here/harp-vectortile-datasource";
+import { VectorTileDecoder } from "@here/harp-vectortile-datasource/lib/VectorTileDecoder";
 import { EventEmitter } from "events";
 import { throttle } from "throttle-debounce";
 import { WhenPropsData } from "../../types";
@@ -66,7 +66,7 @@ class MapHandler extends EventEmitter {
     /**
      * The current data source for the camera.
      */
-    private m_datasource: OmvDataSource | null = null;
+    private m_datasource: VectorTileDataSource | null = null;
     private m_copyrights: CopyrightInfo[];
     private m_copyrightHandler: CopyrightElementHandler | null = null;
 
@@ -175,14 +175,14 @@ class MapHandler extends EventEmitter {
                 this.m_mapViewState.azimuth
             );
 
-            this.m_datasource = new OmvDataSource({
+            this.m_datasource = new VectorTileDataSource({
                 baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
                 apiFormat: APIFormat.XYZOMV,
                 styleSetName: style || undefined,
-                maxZoomLevel: 17,
+                maxDisplayLevel: 17,
                 authenticationCode: accessToken,
                 copyrightInfo: this.m_copyrights,
-                decoder: new OmvTileDecoder(),
+                decoder: new VectorTileDecoder(),
             });
 
             this.m_copyrightHandler = CopyrightElementHandler.install(
@@ -206,7 +206,7 @@ class MapHandler extends EventEmitter {
         });
 
         this.onMovementFinished = () => {
-            getGeometryData(this.m_mapView as MapView, this.m_datasource as OmvDataSource);
+            getGeometryData(this.m_mapView as MapView, this.m_datasource as VectorTileDataSource);
         };
     }
 
@@ -273,7 +273,7 @@ class MapHandler extends EventEmitter {
             .join(" && ");
     }
 
-    addStyleTechnique(style: ResolvedStyleDeclaration): AddStyleTechniqueResult {
+    addStyleTechnique(style: Style): AddStyleTechniqueResult {
         const theme = textEditor.getParsedTheme();
         const currentStyle = settings.get("editorCurrentStyle");
 

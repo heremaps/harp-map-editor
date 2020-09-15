@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { APIFormat, OmvDataSource } from "@here/harp-omv-datasource";
-import { OmvTileDecoder } from "@here/harp-omv-datasource/lib/OmvDecoder";
+import { APIFormat, VectorTileDataSource } from "@here/harp-vectortile-datasource";
+import { VectorTileDecoder } from "@here/harp-vectortile-datasource/lib/VectorTileDecoder";
 import { accessToken } from "../config";
 import settings from "../Settings";
 import MapHandler from "./index";
 
 class MapHighlighter {
     private m_activeWhereParam = "";
-    private m_highlightDataSource: OmvDataSource;
+    private m_highlightDataSource: VectorTileDataSource;
 
     private m_style: any = {
         when: "0",
@@ -46,14 +46,14 @@ class MapHighlighter {
     };
 
     constructor() {
-        this.m_highlightDataSource = new OmvDataSource({
+        this.m_highlightDataSource = new VectorTileDataSource({
             name: "decorations",
             baseUrl: "https://xyz.api.here.com/tiles/herebase.02",
             apiFormat: APIFormat.XYZOMV,
             styleSetName: "tilezen",
-            maxZoomLevel: 17,
+            maxDisplayLevel: 17,
             authenticationCode: accessToken,
-            decoder: new OmvTileDecoder(),
+            decoder: new VectorTileDecoder(),
         });
     }
 
