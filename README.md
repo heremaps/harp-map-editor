@@ -76,6 +76,8 @@ If you have problems, try fixing it manually below.
 
 ### Update gh-pages manually
 
+#### Fixing locally
+
 If you have any trouble with the updating of gh-pages, for example the publish works but the deploy
 fails, then restarting the job won't work, because npm will complain that the given package already
 exists. Deploying to `gh-pages` will then not be executed. To resolve this, go to the root
@@ -87,6 +89,13 @@ directory locally, and run (assuming you have a fresh checkout):
 - `cp -r ../dist/* .`
 - `git add *` (you may also need to `git rm` some files if `git status` complains)
 - `git push origin gh-pages`
+- Go to https://github.com/heremaps/harp-map-editor/settings/branches and select `gh-pages`, and re
+ enable branch protection.
+
+#### Fixing via travis-ci
+
+It is possible to re-run a job with custom yaml, simply remove the `npm publish` step from the
+`.travis.yml` and re-run the job.
 
 Check that the changes are visible: https://heremaps.github.io/harp-map-editor/
 
