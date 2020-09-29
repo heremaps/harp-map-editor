@@ -60,6 +60,36 @@ yarn build
 ```
 The build result will be in `dist` folder.
 
+### Update gh-pages automatically
+
+In order to update `gh-pages`, you will need to first disable the branch protection, otherwise
+TravisCI won't be able to push to that branch.
+
+Increment the package version and then tag your commit, either locally or if the package version has
+been updated already, you can make a release in the GitHub UI and it will create the tag. Note, the
+tag must be of the form: `vX.X.X`, because this is how travis knows to publish, see `.travis.yml`
+
+This will automatically start the job to publish, go to TravisCI and check the status and make sure
+you see something like: `Switched to a new branch 'gh-pages'`
+
+If you have problems, try fixing it manually below.
+
+### Update gh-pages manually
+
+If you have any trouble with the updating of gh-pages, for example the publish works but the deploy
+fails, then restarting the job won't work, because npm will complain that the given package already
+exists. Deploying to `gh-pages` will then not be executed. To resolve this, go to the root
+directory locally, and run (assuming you have a fresh checkout):
+- `git checkout master`
+- `yarn && yarn build`
+- `mv dist/ ..`
+- `git checkout gh-pages`
+- `cp -r ../dist/* .`
+- `git add *` (you may also need to `git rm` some files if `git status` complains)
+- `git push origin gh-pages`
+
+Check that the changes are visible: https://heremaps.github.io/harp-map-editor/
+
 ## License
 
 Copyright (C) 2017-2020 HERE Europe B.V.
