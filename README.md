@@ -1,3 +1,5 @@
+# HERE is stopping its engagement on Harp.gl starting 03/01/2022 in favour of a fully productised and production-grade integration of the harp.gl rendering engine into HERE Maps API for JavaScript (https://developer.here.com/develop/javascript-api) All 3D features and many more will be offered via HERE Maps API for JavaScript moving forward.
+
 # @here/harp-map-editor [![Build Status](https://travis-ci.com/heremaps/harp-map-editor.svg?branch=master)](https://travis-ci.com/heremaps/harp-map-editor)
 
 ## Overview
